@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navgraph.xml"
+    app:startDestination="@id/welCome">
+
+    <fragment
+        android:id="@+id/welCome"
+        android:name="com.reemzet.omr.WelCome"
+        android:label="fragment_wel_come"
+        tools:layout="@layout/fragment_wel_come" >
+        <action
+            android:id="@+id/action_welCome_to_register"
+            app:destination="@id/register" />
+        <action
+            android:id="@+id/action_welCome_to_login"
+            app:destination="@id/login" />
+        <action
+            android:id="@+id/action_welCome_to_omr"
+            app:destination="@id/omr" />
+    </fragment>
+    <fragment
+        android:id="@+id/register"
+        android:name="com.reemzet.omr.Register"
+        android:label="fragment_register"
+        tools:layout="@layout/fragment_register" />
+    <fragment
+        android:id="@+id/login"
+        android:name="com.reemzet.omr.Login"
+        android:label="fragment_login"
+        tools:layout="@layout/fragment_login" >
+        <action
+            android:id="@+id/action_login_to_homeStudent"
+            app:destination="@id/homeStudent" />
+        <action
+            android:id="@+id/action_login_to_homeTeacher"
+            app:destination="@id/homeTeacher" />
+    </fragment>
+    <fragment
+        android:id="@+id/homeStudent"
+        android:name="com.reemzet.omr.HomeStudent"
+        android:label="fragment_home_student"
+        tools:layout="@layout/fragment_home_student" >
+        <action
+            android:id="@+id/action_homeStudent_to_requestBatch"
+            app:destination="@id/requestBatch" />
+        <action
+            android:id="@+id/action_homeStudent_to_tests"
+            app:destination="@id/tests" />
+    </fragment>
+    <fragment
+        android:id="@+id/homeTeacher"
+        android:name="com.reemzet.omr.HomeTeacher"
+        android:label="fragment_home_teacher"
+        tools:layout="@layout/fragment_home_teacher" >
+        <action
+            android:id="@+id/action_homeTeacher_to_requestList"
+            app:destination="@id/requestList" />
+        <action
+            android:id="@+id/action_homeTeacher_to_t_testslist"
+            app:destination="@id/t_testslist" />
+        <action
+            android:id="@+id/action_homeTeacher_to_studentList"
+            app:destination="@id/studentList" />
+        <action
+            android:id="@+id/action_homeTeacher_to_createTest"
+            app:destination="@id/createTest" />
+    </fragment>
+    <fragment
+        android:id="@+id/requestBatch"
+        android:name="com.reemzet.omr.RequestBatch"
+        android:label="fragment_request_batch"
+        tools:layout="@layout/fragment_request_batch" />
+    <fragment
+        android:id="@+id/tests"
+        android:name="com.reemzet.omr.Tests"
+        android:label="fragment_tests"
+        tools:layout="@layout/fragment_tests" >
+        <action
+            android:id="@+id/action_tests_to_omr"
+            app:destination="@id/omr" />
+        <action
+            android:id="@+id/action_tests_to_report"
+            app:destination="@id/report" />
+    </fragment>
+    <fragment
+        android:id="@+id/omr"
+        android:name="com.reemzet.omr.Omr"
+        android:label="fragment_omr"
+        tools:layout="@layout/fragment_omr" />
+    <fragment
+        android:id="@+id/report"
+        android:name="com.reemzet.omr.Report"
+        android:label="fragment_report"
+        tools:layout="@layout/fragment_report" />
+    <fragment
+        android:id="@+id/requestList"
+        android:name="com.reemzet.omr.RequestList"
+        android:label="fragment_request_list"
+        tools:layout="@layout/fragment_request_list" />
+    <fragment
+        android:id="@+id/t_testslist"
+        android:name="com.reemzet.omr.T_testslist"
+        android:label="fragment_t_testslist"
+        tools:layout="@layout/fragment_t_testslist" >
+        <action
+            android:id="@+id/action_t_testslist_to_createTest"
+            app:destination="@id/createTest" />
+        <action
+            android:id="@+id/action_t_testslist_to_setAnswer"
+            app:destination="@id/setAnswer" />
+        <action
+            android:id="@+id/action_t_testslist_to_testReport"
+            app:destination="@id/testReport" />
+    </fragment>
+    <fragment
+        android:id="@+id/studentList"
+        android:name="com.reemzet.omr.StudentList"
+        android:label="fragment_student_list"
+        tools:layout="@layout/fragment_student_list" />
+    <fragment
+        android:id="@+id/createTest"
+        android:name="com.reemzet.omr.CreateTest"
+        android:label="fragment_create_test"
+        tools:layout="@layout/fragment_create_test" >
+        <action
+            android:id="@+id/action_createTest_to_setAnswer"
+            app:destination="@id/setAnswer" />
+    </fragment>
+    <fragment
+        android:id="@+id/setAnswer"
+        android:name="com.reemzet.omr.SetAnswer"
+        android:label="fragment_set_answer"
+        tools:layout="@layout/fragment_set_answer" />
+    <fragment
+        android:id="@+id/testReport"
+        android:name="com.reemzet.omr.TestReport"
+        android:label="fragment_test_report"
+        tools:layout="@layout/fragment_test_report" />
+</navigation>
