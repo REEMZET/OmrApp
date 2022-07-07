@@ -3,12 +3,21 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/Ravi/AndroidStudioProjects/Omr/app/src/main/res/drawable/bg_dark_blue.xml" value="0.204" />
+        <entry key="..\:/Users/Ravi/AndroidStudioProjects/Omr/app/src/main/res/drawable/bg_gray.xml" value="0.204" />
         <entry key="..\:/Users/Ravi/AndroidStudioProjects/Omr/app/src/main/res/drawable/buttongb.xml" value="0.204" />
+        <entry key="..\:/Users/Ravi/AndroidStudioProjects/Omr/app/src/main/res/drawable/editbg.xml" value="0.204" />
+        <entry key="..\:/Users/Ravi/AndroidStudioProjects/Omr/app/src/main/res/drawable/omrbg.xml" value="0.204" />
         <entry key="..\:/Users/Ravi/AndroidStudioProjects/Omr/app/src/main/res/layout/activity_main.xml" value="0.33" />
+        <entry key="..\:/Users/Ravi/AndroidStudioProjects/Omr/app/src/main/res/layout/fragment_create_test.xml" value="0.19635416666666666" />
         <entry key="..\:/Users/Ravi/AndroidStudioProjects/Omr/app/src/main/res/layout/fragment_home_student.xml" value="0.19635416666666666" />
-        <entry key="..\:/Users/Ravi/AndroidStudioProjects/Omr/app/src/main/res/layout/fragment_omr.xml" value="0.2" />
-        <entry key="..\:/Users/Ravi/AndroidStudioProjects/Omr/app/src/main/res/layout/fragment_register.xml" value="0.19635416666666666" />
+        <entry key="..\:/Users/Ravi/AndroidStudioProjects/Omr/app/src/main/res/layout/fragment_home_teacher.xml" value="0.19635416666666666" />
+        <entry key="..\:/Users/Ravi/AndroidStudioProjects/Omr/app/src/main/res/layout/fragment_omr.xml" value="0.25" />
+        <entry key="..\:/Users/Ravi/AndroidStudioProjects/Omr/app/src/main/res/layout/fragment_register.xml" value="0.25" />
+        <entry key="..\:/Users/Ravi/AndroidStudioProjects/Omr/app/src/main/res/layout/fragment_splash_screen.xml" value="0.19635416666666666" />
+        <entry key="..\:/Users/Ravi/AndroidStudioProjects/Omr/app/src/main/res/layout/fragment_student_list.xml" value="0.19635416666666666" />
         <entry key="..\:/Users/Ravi/AndroidStudioProjects/Omr/app/src/main/res/layout/fragment_wel_come.xml" value="0.2" />
+        <entry key="..\:/Users/Ravi/AndroidStudioProjects/Omr/app/src/main/res/layout/omrlayout.xml" value="0.25" />
       </map>
     </option>
   </component>
