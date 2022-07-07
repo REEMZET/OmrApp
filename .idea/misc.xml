@@ -10,6 +10,7 @@
         <entry key="..\:/Users/Ravi/AndroidStudioProjects/Omr/app/src/main/res/layout/fragment_register.xml" value="0.19635416666666666" />
         <entry key="..\:/Users/Ravi/AndroidStudioProjects/Omr/app/src/main/res/layout/fragment_wel_come.xml" value="0.2" />
         <entry key="..\:/Users/sagar/AndroidStudioProjects/OmrApp/app/src/main/res/drawable/bg_dark_blue.xml" value="0.1625" />
+        <entry key="..\:/Users/sagar/AndroidStudioProjects/OmrApp/app/src/main/res/drawable/bg_darkgrey.xml" value="0.1" />
         <entry key="..\:/Users/sagar/AndroidStudioProjects/OmrApp/app/src/main/res/drawable/bg_gray.xml" value="0.1625" />
         <entry key="..\:/Users/sagar/AndroidStudioProjects/OmrApp/app/src/main/res/drawable/buttongb.xml" value="0.255" />
         <entry key="..\:/Users/sagar/AndroidStudioProjects/OmrApp/app/src/main/res/drawable/editbg.xml" value="0.255" />
@@ -17,7 +18,7 @@
         <entry key="..\:/Users/sagar/AndroidStudioProjects/OmrApp/app/src/main/res/layout/activity_main.xml" value="0.15081521739130435" />
         <entry key="..\:/Users/sagar/AndroidStudioProjects/OmrApp/app/src/main/res/layout/fragment_create_test.xml" value="0.15081521739130435" />
         <entry key="..\:/Users/sagar/AndroidStudioProjects/OmrApp/app/src/main/res/layout/fragment_omr.xml" value="0.15081521739130435" />
-        <entry key="..\:/Users/sagar/AndroidStudioProjects/OmrApp/app/src/main/res/layout/fragment_register.xml" value="0.2" />
+        <entry key="..\:/Users/sagar/AndroidStudioProjects/OmrApp/app/src/main/res/layout/fragment_register.xml" value="0.264" />
         <entry key="..\:/Users/sagar/AndroidStudioProjects/OmrApp/app/src/main/res/layout/fragment_report.xml" value="0.15081521739130435" />
         <entry key="..\:/Users/sagar/AndroidStudioProjects/OmrApp/app/src/main/res/layout/fragment_request_batch.xml" value="0.15081521739130435" />
         <entry key="..\:/Users/sagar/AndroidStudioProjects/OmrApp/app/src/main/res/layout/fragment_request_list.xml" value="0.15081521739130435" />
@@ -27,7 +28,7 @@
         <entry key="..\:/Users/sagar/AndroidStudioProjects/OmrApp/app/src/main/res/layout/fragment_t_testslist.xml" value="0.15081521739130435" />
         <entry key="..\:/Users/sagar/AndroidStudioProjects/OmrApp/app/src/main/res/layout/fragment_test_report.xml" value="0.15081521739130435" />
         <entry key="..\:/Users/sagar/AndroidStudioProjects/OmrApp/app/src/main/res/layout/fragment_tests.xml" value="0.15081521739130435" />
-        <entry key="..\:/Users/sagar/AndroidStudioProjects/OmrApp/app/src/main/res/layout/fragment_wel_come.xml" value="0.2223731884057971" />
+        <entry key="..\:/Users/sagar/AndroidStudioProjects/OmrApp/app/src/main/res/layout/fragment_wel_come.xml" value="0.2" />
       </map>
     </option>
   </component>
