@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 public class WelCome extends Fragment {
-    Button login;
+    Button login,registerbtnstudent;
     NavController navController;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -21,6 +21,8 @@ public class WelCome extends Fragment {
        View view= inflater.inflate(R.layout.fragment_wel_come, container, false);
 
         login=view.findViewById(R.id.login);
+        registerbtnstudent=view.findViewById(R.id.registerbtnstudent);
+
 
 
         NavHostFragment navHostFragment =
@@ -32,6 +34,12 @@ public class WelCome extends Fragment {
             @Override
             public void onClick(View v) {
                 navController.navigate(R.id.action_welCome_to_omr);
+            }
+        });
+        registerbtnstudent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                navController.navigate(R.id.action_welCome_to_register);
             }
         });
 

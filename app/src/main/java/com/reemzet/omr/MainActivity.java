@@ -53,9 +53,12 @@ public class MainActivity extends AppCompatActivity {
 
     public void hidenav(){
         navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
-            if (destination.getId()==R.id.welCome){
+            if (destination.getId()==R.id.welCome ){
                 toolbar.setVisibility(View.GONE);
 
+            }
+            if (destination.getId()==R.id.omr){
+                toolbar.setVisibility(View.GONE);
             }
             else {
                 toolbar.setVisibility(View.VISIBLE);
