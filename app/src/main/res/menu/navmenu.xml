@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:title="@string/home"
+        android:icon="@drawable/house"
+        android:id="@+id/homenav"
+        />
+
+
+    <item android:title="@string/about_org"
+        android:id="@+id/aboutorg"
+        android:icon="@drawable/about"/>
+    <item android:title="@string/terms_and_privacy"
+        android:id="@+id/termscond"
+        android:icon="@drawable/termsandc"/>
+    <item android:title="@string/update"
+        android:id="@+id/update"
+        android:icon="@drawable/update"/>
+    <item android:title="@string/share_with_friends"
+        android:id="@+id/share"
+        android:icon="@drawable/ic_baseline_share_24"/>
+    <item android:title="@string/about_developer">
+        <menu >
+            <item
+                android:icon="@drawable/copy"
+                android:id="@+id/aboutdev"
+                android:title="@string/status_stop" />
+        </menu>
+    </item>
+</menu>
