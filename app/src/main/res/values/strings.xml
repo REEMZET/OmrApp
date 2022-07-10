@@ -13,4 +13,6 @@
     <string name="share_with_friends">share with friends</string>
     <string name="status_stop">Powered By <font color="#f7941e">Reemzet</font></string>
     <string name="about_developer">About Developer</string>
+    <string name="todaytest"><u>Tod</u>ay\'s Test</string>
+    <string name="invite">इस ऐप में शामिल होने और एक साथ अध्ययन करने के लिए अपने दोस्तों को आमंत्रित करें</string>
 </resources>

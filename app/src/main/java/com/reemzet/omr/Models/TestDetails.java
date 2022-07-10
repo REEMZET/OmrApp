@@ -2,13 +2,13 @@ package com.reemzet.omr.Models;
 
 public class TestDetails {
 
-    String testname,questionno,testtime,correctmarks,wrongmarks,starttime,testcode;
+    String testname,questionno,testtime,correctmarks,wrongmarks,starttime,testcode,testdate;
 
     public TestDetails() {
 
     }
 
-    public TestDetails(String testname, String questionno, String testtime, String correctmarks, String wrongmarks, String starttime, String testcode) {
+    public TestDetails(String testname, String questionno, String testtime, String correctmarks, String wrongmarks, String starttime, String testcode, String testdate) {
         this.testname = testname;
         this.questionno = questionno;
         this.testtime = testtime;
@@ -16,6 +16,7 @@ public class TestDetails {
         this.wrongmarks = wrongmarks;
         this.starttime = starttime;
         this.testcode = testcode;
+        this.testdate = testdate;
     }
 
     public String getTestname() {
@@ -72,5 +73,13 @@ public class TestDetails {
 
     public void setTestcode(String testcode) {
         this.testcode = testcode;
+    }
+
+    public String getTestdate() {
+        return testdate;
+    }
+
+    public void setTestdate(String testdate) {
+        this.testdate = testdate;
     }
 }

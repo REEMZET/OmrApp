@@ -13,6 +13,10 @@ import androidx.navigation.ui.NavigationUI;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -32,6 +36,10 @@ public class MainActivity extends AppCompatActivity {
     FirebaseAuth mAuth;
     FirebaseDatabase database;
     DatabaseReference teacherref,instituteref,studentref;
+    TextView loginusername,loginuserphonno;
+    LinearLayout chatnav,videonav,notesnav,homenav;
+    ImageView loginuserpic,logout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,6 +47,8 @@ public class MainActivity extends AppCompatActivity {
         drawerLayout = findViewById(R.id.drawer);
         toolbar = findViewById(R.id.toolbar);
         navigationView = findViewById(R.id.nav_view);
+        logout=findViewById(R.id.logout);
+
 
 
         NavHostFragment navHostFragment =
@@ -55,17 +65,42 @@ public class MainActivity extends AppCompatActivity {
         studentref=database.getReference("students");
 
 
+        View headerView=navigationView.getHeaderView(0);
+        loginusername=headerView.findViewById(R.id.loginusername);
+        loginuserphonno=headerView.findViewById(R.id.loginuserphone);
+        loginuserpic=headerView.findViewById(R.id.loginuserpic);
+        chatnav=headerView.findViewById(R.id.chatnav);
+        notesnav=headerView.findViewById(R.id.notesnav);
+        videonav=headerView.findViewById(R.id.videonav);
+        homenav=headerView.findViewById(R.id.homenav);
+
+
         if (mAuth.getCurrentUser()!=null&& mAuth.getUid()!=null){
             teacherref.orderByChild(mAuth.getUid()).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     if (snapshot.exists()){
-                        InstuteDetails instuteDetails=snapshot.getValue(InstuteDetails.class);
-                        navController.popBackStack();
-                        navController.navigate(R.id.homeTeacher);
-                        setupnavigation();
+                        teacherref.child(mAuth.getUid()).addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                                InstuteDetails instuteDetails=snapshot.getValue(InstuteDetails.class);
+                                navController.popBackStack();
+                                navController.navigate(R.id.homeTeacher);
+                                loginusername.setText(instuteDetails.getTeachername());
+                                loginuserphonno.setText(instuteDetails.getTeacherphone());
+                                setupnavigation();
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+
+                            }
+                        });
+
+
                     }else {
-                        studentref.orderByChild(mAuth.getUid()).addValueEventListener(new ValueEventListener() {
+                        studentref.child(mAuth.getUid()).addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
                                 navController.popBackStack();
@@ -89,7 +124,14 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
-
+        logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mAuth.signOut();
+                navController.popBackStack();
+                navController.navigate(R.id.welCome);
+            }
+        });
 
     }
     public void setupnavigation(){

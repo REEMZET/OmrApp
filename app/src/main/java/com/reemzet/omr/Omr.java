@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -41,6 +42,7 @@ public class Omr extends Fragment {
     ArrayList<String> correctanswerlist;
     int notattemped = 0, totalmarksobtained,totalcorrect;
     NavController navController;
+    FirebaseAuth mAuth;
 
 
     @Override
@@ -50,12 +52,14 @@ public class Omr extends Fragment {
         View view = inflater.inflate(R.layout.fragment_omr, container, false);
         omrrecycler = view.findViewById(R.id.omrrecycyler);
         omrsubmitbtn = view.findViewById(R.id.omrsubmitbtn);
+        mAuth=FirebaseAuth.getInstance();
+
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         omrrecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
         testanswer = database.getReference("/institute/udisdvjvvdfvdf/tests/nvdjsjdsnjdsn/answers");
-        testdetails = database.getReference("institute/udisdvjvvdfvdf/tests/nvdjsjdsnjdsn/testdetails/institute/udisdvjvvdfvdf/tests/nvdjsjdsnjdsn/test details");
 
+        testdetails=database.getReference("institute").child(mAuth.getUid()).child("TestList");
         NavHostFragment navHostFragment =
                 (NavHostFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
         assert navHostFragment != null;
@@ -66,7 +70,7 @@ public class Omr extends Fragment {
         answerlist = new ArrayList<>();
         selectedanswer = new ArrayList<>();
         correctanswerlist = new ArrayList<>();
-
+/*
         testdetails.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -109,7 +113,7 @@ public class Omr extends Fragment {
 
             }
         });
-
+     */
 
         return view;
     }
