@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "544474553486",
+    "project_id": "omrapp-8655c",
+    "storage_bucket": "omrapp-8655c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:544474553486:android:46bbbd24ac37693fc7bddf",
+        "android_client_info": {
+          "package_name": "com.reemzet.omr"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "544474553486-fmim4o31amkmhok3rhcl3heqgd11julv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCzzt2rP6a3VZJj4BKI-6whCX2KWHoDrJ4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "544474553486-fmim4o31amkmhok3rhcl3heqgd11julv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
