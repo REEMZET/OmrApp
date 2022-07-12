@@ -1,22 +1,34 @@
 package com.reemzet.omr;
 
+import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
+import android.app.TimePickerDialog;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -24,6 +36,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.orhanobut.dialogplus.DialogPlus;
+import com.orhanobut.dialogplus.ViewHolder;
+import com.reemzet.omr.Adapter.TeacherTestListViewHolder;
 import com.reemzet.omr.Adapter.TodaystestlistViewHolder;
 import com.reemzet.omr.Models.TestDetails;
 
@@ -31,6 +46,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.TimeZone;
 
 
 public class HomeTeacher extends Fragment {
@@ -42,7 +58,18 @@ FirebaseDatabase database;
 DatabaseReference TestListref;
 FirebaseAuth mAuth;
 TestDetails testDetails;
-TextView todaysdate;
+TextView todaysdate,tvcreatetest;
+ConstraintLayout consttestlist;
+    DialogPlus dialog;
+    ImageView calendar,clock;
+    int d,m,y,minute,hours;
+    TextView tvtestdate,tvtesttime;
+    EditText etnoofques,etduration,etcorrectmarks,etincorrectmarks,ettestcode,ettestname;
+    String noofques,testduration,correctmarks,incorrectmarks,testcode,testartstime,testdate,testname;
+    Button btnsubmit;
+    ProgressDialog progressDialog;
+    boolean fieldboolean;
+
     FirebaseRecyclerAdapter<TestDetails, TodaystestlistViewHolder> adapter;
 
 
@@ -53,29 +80,102 @@ TextView todaysdate;
         View view= inflater.inflate(R.layout.fragment_home_teacher, container, false);
         todaystestrecycler=view.findViewById(R.id.todaytestrecycler);
         todaysdate=view.findViewById(R.id.todaydate);
+        consttestlist=view.findViewById(R.id.consttestlist);
+        tvcreatetest=view.findViewById(R.id.createtest);
+
+
 
         todaystestrecycler.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
         NavHostFragment navHostFragment =
                 (NavHostFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
         assert navHostFragment != null;
+        navController = navHostFragment.getNavController();
+
         mAuth=FirebaseAuth.getInstance();
         database=FirebaseDatabase.getInstance();
         TestListref=database.getReference("institute").child(mAuth.getUid()).child("TestList");
 
-        Date c = Calendar.getInstance().getTime();
-        SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy", Locale.getDefault());
-        String formattedDate = df.format(c);
-        todaysdate.setText(formattedDate);
+        setdatetohome();
         getdatafromserver();
 
+        consttestlist.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                navController.navigate(R.id.t_testslist);
+            }
+        });
+        tvcreatetest.setOnClickListener(v -> {
+            dialog = DialogPlus.newDialog(getContext())
+                    .setContentHolder(new ViewHolder(R.layout.createtestlayout))
+                    .setGravity(Gravity.CENTER)
+                    .create();
+            dialog.show();
+            initdialogview();
+
+            Calendar c=Calendar.getInstance();
+            calendar.setOnClickListener(v1 -> {
+                y=c.get(Calendar.YEAR);
+                m=c.get(Calendar.MONTH);
+                d=c.get(Calendar.DAY_OF_MONTH);
+                DatePickerDialog dp=new DatePickerDialog(getActivity(), (view1, year, month, dayOfMonth) -> {
+                    month++;
+                    tvtestdate.setText(dayOfMonth+"/"+month+"/"+year);
+                },y,m,d);
+                dp.setTitle("Select Meeting Date");
+                dp.show();
+            });
+            clock.setOnClickListener(v13 -> {
+                minute=c.get(Calendar.MINUTE);
+                hours=c.get(Calendar.HOUR_OF_DAY);
+
+                TimePickerDialog timePickerDialog=new TimePickerDialog(getActivity(), new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                        c.set(Calendar.HOUR_OF_DAY,hourOfDay);
+                        c.set(Calendar.MINUTE,minute);
+                        c.setTimeZone(TimeZone.getDefault());
+                        SimpleDateFormat format=new SimpleDateFormat("h:mm a");
+                        String time=format.format(c.getTime());
+                        tvtesttime.setText(time);
+                    }
+                },hours,minute,false);
+                timePickerDialog.setTitle("Select meeting time");
+                timePickerDialog.show();
+            });
+
+            btnsubmit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showloding();
+                    dialogdatavalidation();
+                    if (fieldboolean){
+                        TestDetails testDetails =new TestDetails(testname,noofques,testduration,correctmarks,incorrectmarks,testartstime,testcode,testdate,"Answer not Set");
+                        TestListref.push().setValue(testDetails).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                dialog.dismiss();
+                                progressDialog.dismiss();
+                            }
+                        });
+                    }else {
+                        progressDialog.dismiss();
+                    }
+                }
+            });
+        });
         return view;
+
     }
     public void getdatafromserver(){
         TestListref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                testDetails=snapshot.getValue(TestDetails.class);
-                setData();
+
+                if (snapshot.exists()){
+                    testDetails=snapshot.getValue(TestDetails.class);
+                    setData();
+                }
+
             }
 
             @Override
@@ -112,9 +212,116 @@ TextView todaysdate;
                     totalmarks=0;
                     holder.duration.setText("  Duration\n   "+model.getTesttime());
                     holder.date.setText("Date\n"+model.getTestdate());
+                    holder.teststatus.setText(model.getStatus());
+                    holder.editnow.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            navController.navigate(R.id.omr);
+                        }
+                    });
+                    if (holder.teststatus.getText().equals("Answer not Set")){
+                        holder.teststatus.setTextColor(Color.RED);
+                    }
             }
         };
         todaystestrecycler.setAdapter(adapter);
         adapter.startListening();
     }
+    public void initdialogview(){
+        View myview = dialog.getHolderView();
+        etnoofques=myview.findViewById(R.id.etnofquestion);
+        etduration=myview.findViewById(R.id.etduration);
+        etcorrectmarks=myview.findViewById(R.id.etcorrectmarks);
+        etincorrectmarks=myview.findViewById(R.id.etincorrectmarks);
+        ettestcode=myview.findViewById(R.id.ettestcode);
+        ettestname=myview.findViewById(R.id.ettestname);
+        calendar=myview.findViewById(R.id.calendar);
+        clock=myview.findViewById(R.id.clock);
+        tvtestdate=myview.findViewById(R.id.tvtestdate);
+        tvtesttime=myview.findViewById(R.id.tvtesttime);
+        btnsubmit=myview.findViewById(R.id.btnsubmit);
+    }
+    public boolean dialogdatavalidation(){
+        if (etnoofques.getText().toString().isEmpty()) {
+            etnoofques.setError("field cant be empty");
+            fieldboolean = false;
+        }else {
+            etnoofques.setError(null);
+            noofques= etnoofques.getText().toString();
+            fieldboolean = true;
+        }
+        if (etduration.getText().toString().isEmpty()) {
+            etduration.setError("field cant be empty");
+            fieldboolean = false;
+        }else {
+            etduration.setError(null);
+            testduration = etduration.getText().toString();
+            fieldboolean = true;
+        }
+        if (etcorrectmarks.getText().toString().isEmpty()) {
+            etcorrectmarks.setError("field cant be empty");
+            fieldboolean = false;
+        }else {
+            etcorrectmarks.setError(null);
+            correctmarks=  etcorrectmarks.getText().toString();
+            fieldboolean = true;
+        }
+        if (etincorrectmarks.getText().toString().isEmpty()) {
+            etincorrectmarks.setError("field cant be empty");
+            fieldboolean = false;
+        }else {
+            etincorrectmarks.setError(null);
+            incorrectmarks = etincorrectmarks.getText().toString();
+            fieldboolean = true;
+        }
+        if (ettestcode.getText().toString().isEmpty()) {
+            ettestcode .setError("field cant be empty");
+            fieldboolean = false;
+        }else {
+            ettestcode .setError(null);
+            testcode =ettestcode.getText().toString();
+            fieldboolean = true;
+        }
+        if (ettestname.getText().toString().isEmpty()) {
+            ettestname .setError("field cant be empty");
+            fieldboolean = false;
+        }else {
+            ettestname .setError(null);
+            testname =ettestname.getText().toString();
+            fieldboolean = true;
+        }
+
+        if (tvtesttime.getText().toString().equals("Test Time")){
+            tvtesttime.setError("Can't be empty");
+            fieldboolean=false;
+        }else{
+            tvtesttime.setError(null);
+            testartstime=tvtesttime.getText().toString();
+            fieldboolean=true;
+        }
+        if (tvtestdate.getText().toString().equals("Test Date")){
+            tvtestdate.setError("Can't be empty");
+            fieldboolean=false;
+        }else {
+            tvtestdate.setError(null);
+            testdate=tvtestdate.getText().toString();
+            fieldboolean=true;
+        }
+        return fieldboolean;
+    }
+
+    public void showloding() {
+        progressDialog = new ProgressDialog(getActivity());
+        progressDialog.show();
+        progressDialog.setContentView(R.layout.dialoprogress);
+        progressDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        progressDialog.setCanceledOnTouchOutside(false);
+    }
+    public void setdatetohome(){
+        Date cd = Calendar.getInstance().getTime();
+        SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy", Locale.getDefault());
+        String formattedDate = df.format(cd);
+        todaysdate.setText(formattedDate);
+    }
+
 }

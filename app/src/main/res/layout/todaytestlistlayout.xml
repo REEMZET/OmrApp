@@ -39,10 +39,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
-                android:layout_marginEnd="8dp"
+                android:layout_marginEnd="4dp"
                 android:gravity="end"
                 android:text="Total Ques-50"
-                android:textColor="#333333" />
+                android:textColor="#3C3C3C" />
         </LinearLayout>
 
         <LinearLayout
@@ -63,17 +63,24 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
                 android:text="04:00pm"
-                android:textColor="#009688" />
+                android:textColor="#3C3C3C" />
+
+            <TextView
+                android:id="@+id/teststatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="Pending" />
 
             <TextView
                 android:id="@+id/testtotalmarks"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:layout_weight="1"
+                android:layout_marginEnd="4dp"
                 android:gravity="end"
                 android:text="Total Marks-200"
-                android:textColor="#373636" />
+                android:textColor="#3C3C3C" />
         </LinearLayout>
 
         <LinearLayout
@@ -90,7 +97,7 @@
 
 
                 android:text="  Duration\n   2 hours"
-                android:textColor="#F44336" />
+                android:textColor="#3C3C3C" />
 
             <TextView
                 android:id="@+id/tvdate"
@@ -100,7 +107,7 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="Date\n4/7/2022"
-                android:textColor="#455DDF" />
+                android:textColor="#3C3C3C" />
 
             <TextView
                 android:id="@+id/editnowbtn"

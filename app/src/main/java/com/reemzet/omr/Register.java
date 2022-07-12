@@ -74,9 +74,11 @@ public class Register extends Fragment {
             public void onClick(View v) {
 
                 if (registerbtn.getText().toString().equals("Get Otp")){
-                   if (fieldcheck()){
+                    fieldcheck();
+                   if (fieldboolean){
                        showloding();
                         otpsent(teacherphone);
+
                    }
 
                 }else{
@@ -164,13 +166,6 @@ public class Register extends Fragment {
         else {
             etphone.setError(null);
             teacherphone = etphone.getText().toString();
-            fieldboolean = true;
-        }
-        if (!agreecheckbox.isChecked()) {
-            agreecheckbox.setError("can't be empty");
-            fieldboolean = false;
-        } else {
-           agreecheckbox.setError(null);
             fieldboolean = true;
         }
 

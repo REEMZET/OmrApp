@@ -13,7 +13,7 @@ import android.widget.TextView;
 public class TestReport extends Fragment {
 
    TextView totalmarks,correctans,incorrectans,unattempedans;
-   String tmarks,tcorrect,tincorrect,unattempted;
+   String tmarks,tcorrect,tquestion,unattempted;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -27,10 +27,12 @@ public class TestReport extends Fragment {
         tmarks=getArguments().getString("totalmarks");
         tcorrect=getArguments().getString("correct");
         unattempted=getArguments().getString("unattempted");
+        tquestion=getArguments().getString("totalquestion");
 
         totalmarks.setText("Total marks- "+tmarks);
         correctans.setText("Total correct- "+tcorrect);
         unattempedans.setText("Total left- "+unattempted);
+        incorrectans.setText("Total incorrect-"+String.valueOf(Integer.parseInt(tquestion)-Integer.parseInt(unattempted)-Integer.parseInt(tcorrect)));
 
 
 

@@ -3,9 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Login">
-
-
+    tools:context=".RegisterStudent">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -14,7 +12,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:gravity="center"
             android:orientation="vertical">
 
@@ -66,11 +64,6 @@
                 android:textSize="15dp" />
 
 
-
-
-
-
-
             <EditText
 
                 android:id="@+id/etstudentemail"
@@ -97,7 +90,7 @@
 
             <EditText
 
-                android:id="@+id/board"
+                android:id="@+id/etpreparation"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
@@ -107,6 +100,30 @@
                 android:ems="10"
                 android:fontFamily="@font/dm_sans"
                 android:hint="Preparation for eg.board, ssc ,Upsc, Bpsc"
+                android:inputType="none|textEmailSubject"
+                android:maxLength="25"
+                android:maxLines="1"
+                android:minHeight="48dp"
+                android:paddingStart="29dp"
+                android:paddingTop="13dp"
+                android:paddingBottom="13dp"
+                android:textColor="#050505"
+                android:textColorHint="#606060"
+
+                android:textSize="15dp" />
+
+            <EditText
+
+                android:id="@+id/etstudentCity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:width="340dp"
+                android:height="50dp"
+                android:background="@drawable/bg_gray"
+                android:ems="10"
+                android:fontFamily="@font/dm_sans"
+                android:hint="City / Location"
                 android:inputType="none|textEmailSubject"
                 android:maxLength="25"
                 android:maxLines="1"
@@ -142,25 +159,8 @@
                 android:textColorHint="#606060"
                 android:textSize="15dp" />
 
-            <CheckBox
-                android:id="@+id/agreecheckbox"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:buttonTint="#7165E3"
-                android:fontFamily="@font/dm_sans_medium"
-                android:lineHeight="18dp"
-                android:minHeight="48dp"
-                android:text="By creating your account you have to agree\n with our Teams and Conditions."
-                android:textColor="#CC1C1939"
-                android:textFontWeight="400"
-                android:textSize="13sp"
-                android:width="330dp"
-                android:height="45dp"
-                />
-
             <EditText
-                android:id="@+id/ettotp"
+                android:id="@+id/etstudentotp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
@@ -181,7 +181,7 @@
                 android:visibility="gone" />
 
             <Button
-                android:id="@+id/registerbtn"
+                android:id="@+id/studentregisterbtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
@@ -220,6 +220,5 @@
                 android:textSize="15dp" />
         </LinearLayout>
     </ScrollView>
-
 
 </FrameLayout>

@@ -10,6 +10,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 
+import android.app.ProgressDialog;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.View;
@@ -39,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
     TextView loginusername,loginuserphonno;
     LinearLayout chatnav,videonav,notesnav,homenav;
     ImageView loginuserpic,logout;
+    ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
         videonav=headerView.findViewById(R.id.videonav);
         homenav=headerView.findViewById(R.id.homenav);
 
-
+            showloding();
         if (mAuth.getCurrentUser()!=null&& mAuth.getUid()!=null){
             teacherref.orderByChild(mAuth.getUid()).addValueEventListener(new ValueEventListener() {
                 @Override
@@ -90,6 +92,7 @@ public class MainActivity extends AppCompatActivity {
                                 loginusername.setText(instuteDetails.getTeachername());
                                 loginuserphonno.setText(instuteDetails.getTeacherphone());
                                 setupnavigation();
+                                progressDialog.dismiss();
                             }
 
                             @Override
@@ -105,6 +108,7 @@ public class MainActivity extends AppCompatActivity {
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
                                 navController.popBackStack();
                                 navController.navigate(R.id.homeStudent);
+                                progressDialog.dismiss();
                             }
 
                             @Override
@@ -122,6 +126,8 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
 
+        }else{
+            progressDialog.dismiss();
         }
 
         logout.setOnClickListener(new View.OnClickListener() {
@@ -158,5 +164,12 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+    }
+    public void showloding() {
+        progressDialog = new ProgressDialog(MainActivity.this);
+        progressDialog.show();
+        progressDialog.setContentView(R.layout.dialoprogress);
+        progressDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        progressDialog.setCanceledOnTouchOutside(false);
     }
 }

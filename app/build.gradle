@@ -45,4 +45,8 @@ dependencies {
 
     def lottieVersion = "3.4.0"
     implementation "com.airbnb.android:lottie:$lottieVersion"
+    //dialog plus
+    implementation 'com.orhanobut:dialogplus:1.11@aar'
+    //radio button
+    implementation 'com.nex3z:toggle-button-group:1.2.3'
 }

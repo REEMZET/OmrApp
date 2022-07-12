@@ -19,6 +19,9 @@
         <action
             android:id="@+id/action_welCome_to_omr"
             app:destination="@id/omr" />
+        <action
+            android:id="@+id/action_welCome_to_registerStudent"
+            app:destination="@id/registerStudent" />
     </fragment>
     <fragment
         android:id="@+id/register"
@@ -138,4 +141,13 @@
         android:name="com.reemzet.omr.TestReport"
         android:label="fragment_test_report"
         tools:layout="@layout/fragment_test_report" />
+    <fragment
+        android:id="@+id/registerStudent"
+        android:name="com.reemzet.omr.RegisterStudent"
+        android:label="fragment_register_student"
+        tools:layout="@layout/fragment_register_student" >
+        <action
+            android:id="@+id/action_registerStudent_to_homeStudent"
+            app:destination="@id/homeStudent" />
+    </fragment>
 </navigation>
