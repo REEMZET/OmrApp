@@ -2,6 +2,7 @@ package com.reemzet.omr;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,6 +44,7 @@ public class SetAnswer extends Fragment {
 
     Button submitanswerbtn;
     ProgressDialog progressDialog;
+    boolean checked;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -120,31 +122,7 @@ public class SetAnswer extends Fragment {
             }
         });
 
-        submitanswerbtn.setOnClickListener(v -> {
 
-            showloding();
-            if (selectedanswer.contains("x")) {
-                Toast.makeText(getContext(), "Please select all option", Toast.LENGTH_SHORT).show();
-                progressDialog.dismiss();
-            } else {
-                for (int i = 0; i < selectedanswer.size(); i++) {
-                    int b = 1;
-                    answerlistref.child(String.valueOf(b + i)).setValue(selectedanswer.get(i)).addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            progressDialog.dismiss();
-                        }
-                    });
-                }
-                testdetailsref.child("status").setValue("Ready").addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        Toast.makeText(getContext(), "answer set Successfully", Toast.LENGTH_SHORT).show();
-                    }
-                });
-
-            }
-        });
 
         return view;
 
@@ -247,6 +225,33 @@ public class SetAnswer extends Fragment {
 
                 }
             });
+            submitanswerbtn.setOnClickListener(v -> {
+               // showloding();
+                if (!selectedanswer.contains("x")){
+                    if (!selectedanswer.get(1).equals("0")) {
+                        for (int i = 0; i < selectedanswer.size(); i++) {
+                            int b = 1;
+                            answerlistref.child(String.valueOf(b + i)).setValue(selectedanswer.get(i)).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                }
+                            });
+                        }
+
+                    testdetailsref.child("status").setValue("Ready").addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            Toast.makeText(getContext(), "answer set Successfully", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                     }else {
+                        Toast.makeText(getContext(), "Please select all option", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+
+            });
+
 
 
         }

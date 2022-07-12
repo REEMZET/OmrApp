@@ -5,6 +5,7 @@ import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -144,9 +145,12 @@ public class T_testslist extends Fragment {
                 int totalmarks=Integer.parseInt(model.getCorrectmarks())*Integer.parseInt(model.getQuestionno());
                 holder.tvtotalmarks.setText("Marks-"+totalmarks);
                 totalmarks=0;
-                holder.duration.setText("Duration:-"+model.getTesttime());
+                holder.duration.setText("Duration:-"+model.getTesttime()+"mins");
                 holder.date.setText("Date:-"+model.getTestdate());
                 holder.tteststatus.setText(model.getStatus());
+                if (holder.tteststatus.getText().equals("Answer not Set")){
+                    holder.tteststatus.setTextColor(Color.RED);
+                }
                 holder.editnow.setOnClickListener(v -> {
                     dialog = DialogPlus.newDialog(getContext())
                             .setContentHolder(new ViewHolder(R.layout.testeditlayout))
@@ -185,6 +189,7 @@ public class T_testslist extends Fragment {
                         timePickerDialog.setTitle("Select meeting time");
                         timePickerDialog.show();
                     });
+
 
         btnsubmit.setOnClickListener(new View.OnClickListener() {
             @Override

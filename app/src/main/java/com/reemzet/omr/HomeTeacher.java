@@ -210,7 +210,7 @@ ConstraintLayout consttestlist;
                     int totalmarks=Integer.parseInt(model.getCorrectmarks())*Integer.parseInt(model.getQuestionno());
                     holder.tvtotalmarks.setText("Marks-"+totalmarks);
                     totalmarks=0;
-                    holder.duration.setText("  Duration\n   "+model.getTesttime());
+                    holder.duration.setText("  Duration\n   "+model.getTesttime()+"mins");
                     holder.date.setText("Date\n"+model.getTestdate());
                     holder.teststatus.setText(model.getStatus());
                     holder.editnow.setOnClickListener(new View.OnClickListener() {
