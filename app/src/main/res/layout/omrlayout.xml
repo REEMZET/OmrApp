@@ -23,6 +23,7 @@
 
             android:background="@drawable/omrbg"
             android:gravity="center"
+            android:minWidth="35dp"
             android:padding="5dp"
             android:text="1."
             android:textColor="#000000"

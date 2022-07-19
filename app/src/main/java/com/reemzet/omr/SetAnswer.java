@@ -87,7 +87,7 @@ public class SetAnswer extends Fragment {
                                 int b = 1;
                                 list.add(new OmrModel(String.valueOf(b + i), String.valueOf(answerlist.get(i))));
 
-                                selectedanswer.add("0");
+                                selectedanswer.add("x");
                                 OmrAdapter omrAdapter = new OmrAdapter(getContext(), list);
                                 answerrecyclerview.setAdapter(omrAdapter);
                                 answerrecyclerview.setLayoutManager(new GridLayoutManager(getContext(), 1));
@@ -99,7 +99,7 @@ public class SetAnswer extends Fragment {
                             for (i = 0; i <questionno; i++) {
                                 int b = 1;
                                 list.add(new OmrModel(String.valueOf(b+i), "x"));
-                                selectedanswer.add("0");
+                                selectedanswer.add("x");
                                 OmrAdapter omrAdapter = new OmrAdapter(getContext(), list);
                                 answerrecyclerview.setAdapter(omrAdapter);
                                 answerrecyclerview.setLayoutManager(new GridLayoutManager(getContext(), 1));
@@ -226,9 +226,8 @@ public class SetAnswer extends Fragment {
                 }
             });
             submitanswerbtn.setOnClickListener(v -> {
-               // showloding();
-                if (!selectedanswer.contains("x")){
-                    if (!selectedanswer.get(1).equals("0")) {
+                    //checkallchecked();
+                if (checkallchecked()){
                         for (int i = 0; i < selectedanswer.size(); i++) {
                             int b = 1;
                             answerlistref.child(String.valueOf(b + i)).setValue(selectedanswer.get(i)).addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -244,9 +243,9 @@ public class SetAnswer extends Fragment {
                             Toast.makeText(getContext(), "answer set Successfully", Toast.LENGTH_SHORT).show();
                         }
                     });
-                     }else {
-                        Toast.makeText(getContext(), "Please select all option", Toast.LENGTH_SHORT).show();
-                    }
+
+                }else {
+                    Toast.makeText(getContext(), "Please select all option", Toast.LENGTH_SHORT).show();
                 }
 
 
@@ -296,4 +295,11 @@ public class SetAnswer extends Fragment {
         progressDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         progressDialog.setCanceledOnTouchOutside(false);
     }
-}
+    public boolean checkallchecked(){
+        if (selectedanswer.contains("x")){
+            return false;
+        }else
+            return true;
+        }
+    }
+

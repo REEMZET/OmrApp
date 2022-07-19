@@ -195,6 +195,7 @@
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:id="@+id/constraintrequestlist"
                         android:background="#C82196F3">
 
                         <TextView
@@ -224,7 +225,7 @@
                             app:layout_constraintVertical_bias="0.8" />
 
                         <TextView
-                            android:id="@+id/tvnooftest"
+                            android:id="@+id/tvnoofrequest"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:background="@drawable/numberbg"
@@ -232,7 +233,7 @@
                             android:paddingTop="4dp"
                             android:paddingEnd="8dp"
                             android:paddingBottom="4dp"
-                            android:text="5"
+                            android:text="0"
                             android:textColor="#040404"
                             android:textSize="14sp"
                             android:textStyle="bold"
@@ -268,7 +269,7 @@
                             android:paddingTop="4dp"
                             android:paddingEnd="8dp"
                             android:paddingBottom="4dp"
-                            android:text="100"
+                            android:text="0"
                             android:textColor="#040404"
                             android:textSize="14sp"
                             android:textStyle="bold"
@@ -362,6 +363,7 @@
 
                         <TextView
 
+                            android:id="@+id/tvnotests"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:background="@drawable/numberbg"
@@ -369,12 +371,12 @@
                             android:paddingTop="4dp"
                             android:paddingEnd="8dp"
                             android:paddingBottom="4dp"
-                            android:text="5"
+                            android:text="0"
                             android:textColor="#040404"
                             android:textSize="14sp"
                             android:textStyle="bold"
-                            app:layout_constraintBottom_toBottomOf="parent"
 
+                            app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="@+id/textView9"
                             app:layout_constraintHorizontal_bias="0.75"
                             app:layout_constraintStart_toEndOf="@+id/imageView6"
@@ -488,6 +490,7 @@
                     app:cardCornerRadius="4dp">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/constraintupdate"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="#A8FF5722">

@@ -20,14 +20,16 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="4dp"
             android:gravity="center"
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/textView3"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="15dp"
                 android:width="170dp"
                 android:height="46dp"
                 android:fontFamily="@font/dm_sans_bold"
@@ -39,9 +41,9 @@
 
             <TextView
                 android:id="@+id/textView4"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="10dp"
                 android:fontFamily="@font/aclonica"
                 android:text="Please provide following\ndetails for your new account"
                 android:textAlignment="center"
@@ -50,9 +52,11 @@
 
             <EditText
                 android:id="@+id/etteachername"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
                 android:layout_marginTop="20dp"
+                android:layout_marginEnd="20dp"
                 android:width="340dp"
                 android:height="50dp"
                 android:background="@drawable/bg_gray"
@@ -72,17 +76,19 @@
 
             <EditText
                 android:id="@+id/etinstitutename"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
                 android:layout_marginTop="8dp"
+                android:layout_marginEnd="20dp"
                 android:width="340dp"
                 android:height="50dp"
                 android:background="@drawable/bg_gray"
                 android:ems="10"
                 android:fontFamily="@font/dm_sans"
+
                 android:hint="Institute Name"
                 android:inputType="textPersonName|textCapSentences"
-
                 android:maxLength="35"
                 android:maxLines="1"
                 android:minHeight="48dp"
@@ -96,9 +102,11 @@
 
             <EditText
                 android:id="@+id/etuniquecode"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
                 android:layout_marginTop="8dp"
+                android:layout_marginEnd="20dp"
                 android:width="340dp"
                 android:height="50dp"
                 android:background="@drawable/bg_gray"
@@ -112,29 +120,7 @@
                 android:paddingStart="29dp"
                 android:paddingTop="13dp"
                 android:paddingBottom="13dp"
-                android:textColor="#050505"
-                android:textColorHint="#606060"
 
-                android:textSize="15dp" />
-
-            <EditText
-                android:id="@+id/etcity"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:width="340dp"
-                android:height="50dp"
-                android:background="@drawable/bg_gray"
-                android:ems="10"
-                android:fontFamily="@font/dm_sans"
-                android:hint="City / Location of Institute"
-                android:inputType="textPersonName|textCapSentences"
-                android:maxLength="20"
-                android:maxLines="1"
-                android:minHeight="48dp"
-                android:paddingStart="29dp"
-                android:paddingTop="13dp"
-                android:paddingBottom="13dp"
                 android:textColor="#050505"
                 android:textColorHint="#606060"
                 android:textSize="15dp" />
@@ -142,9 +128,11 @@
             <EditText
 
                 android:id="@+id/etteacheremail"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
                 android:layout_marginTop="8dp"
+                android:layout_marginEnd="20dp"
                 android:width="340dp"
                 android:height="50dp"
                 android:background="@drawable/bg_gray"
@@ -158,17 +146,19 @@
                 android:paddingStart="29dp"
                 android:paddingTop="13dp"
                 android:paddingBottom="13dp"
+
                 android:textColor="#050505"
                 android:textColorHint="#606060"
-
                 android:textSize="15dp" />
 
             <EditText
 
                 android:id="@+id/etteacherphone"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
                 android:layout_marginTop="8dp"
+                android:layout_marginEnd="20dp"
                 android:width="340dp"
                 android:height="50dp"
                 android:background="@drawable/bg_gray"
@@ -186,25 +176,61 @@
                 android:textColorHint="#606060"
                 android:textSize="15dp" />
 
-            <CheckBox
-                android:id="@+id/agreecheckbox"
-                android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/textView_indian_states"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:buttonTint="#7165E3"
-                android:fontFamily="@font/dm_sans_medium"
-                android:lineHeight="18dp"
-                android:minHeight="48dp"
-                android:text="By creating your account you have to agree\n with our Teams and Conditions."
-                android:textColor="#CC1C1939"
-                android:textFontWeight="400"
-                android:textSize="13sp" />
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="20dp"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:paddingStart="4dp"
+                android:text="@string/state"
+                android:textColor="#555555" />
+
+
+            <Spinner
+                android:id="@+id/spinner_indian_states"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_below="@id/textView_indian_states"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="20dp"
+                android:background="@drawable/bg_gray" />
+
+            <TextView
+                android:id="@+id/textView_indian_districts"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/spinner_indian_states"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="20dp"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:paddingStart="4dp"
+                android:text="@string/district"
+                android:textColor="#555555" />
+
+            <Spinner
+                android:id="@+id/spinner_indian_districts"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_below="@id/textView_indian_districts"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="20dp"
+                android:background="@drawable/bg_gray" />
 
             <EditText
                 android:id="@+id/ettotp"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
                 android:layout_marginTop="8dp"
+                android:layout_marginEnd="20dp"
                 android:background="@drawable/bg_gray"
                 android:ems="10"
                 android:fontFamily="@font/dm_sans"
@@ -223,9 +249,11 @@
 
             <Button
                 android:id="@+id/registerbtn"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="20dp"
                 android:width="340sp"
                 android:height="60sp"
                 android:background="@drawable/editbg"
@@ -236,7 +264,7 @@
 
             <TextView
                 android:id="@+id/textView5"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:fontFamily="@font/dm_sans"
@@ -249,7 +277,7 @@
 
             <TextView
                 android:id="@+id/signintv"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
                 android:fontFamily="@font/dm_sans"

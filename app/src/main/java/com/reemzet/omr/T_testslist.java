@@ -63,15 +63,15 @@ public class T_testslist extends Fragment {
     RecyclerView testlistrecycler;
     NavController navController;
     FirebaseDatabase database;
-    DatabaseReference TestListref;
-    FirebaseAuth mAuth;
+    DatabaseReference TestListref,scoreref;
+
     TestDetails testDetails;
     DialogPlus dialog;
     ImageView calendar,clock;
     int d,m,y,minute,hours;
     TextView etnoofques,tvtestdate,tvtesttime;
     EditText etduration,etcorrectmarks,etincorrectmarks,ettestcode,ettestname;
-    String noofques,testduration,correctmarks,incorrectmarks,testcode,testartstime,testdate,testname;
+    String noofques,testduration,correctmarks,incorrectmarks,testcode,testartstime,testdate,testname,orgcode;
     FirebaseRecyclerAdapter<TestDetails, TeacherTestListViewHolder> adapter;
     Button btnsubmit;
     ProgressDialog progressDialog;
@@ -94,10 +94,10 @@ public class T_testslist extends Fragment {
                 (NavHostFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
         assert navHostFragment != null;
         navController = navHostFragment.getNavController();
+        orgcode=getArguments().getString("orgcode");
 
-        mAuth=FirebaseAuth.getInstance();
         database=FirebaseDatabase.getInstance();
-        TestListref=database.getReference("institute").child(mAuth.getUid()).child("TestList");
+        TestListref=database.getReference("institute").child(orgcode).child("TestList");
 
         getdatafromserver();
         selectedanswer = new ArrayList<>();
@@ -148,9 +148,11 @@ public class T_testslist extends Fragment {
                 holder.duration.setText("Duration:-"+model.getTesttime()+"mins");
                 holder.date.setText("Date:-"+model.getTestdate());
                 holder.tteststatus.setText(model.getStatus());
+                holder.tvtestcode.setText("pass-"+model.getTestcode());
                 if (holder.tteststatus.getText().equals("Answer not Set")){
                     holder.tteststatus.setTextColor(Color.RED);
                 }
+
                 holder.editnow.setOnClickListener(v -> {
                     dialog = DialogPlus.newDialog(getContext())
                             .setContentHolder(new ViewHolder(R.layout.testeditlayout))
@@ -180,8 +182,10 @@ public class T_testslist extends Fragment {
                             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                                 c.set(Calendar.HOUR_OF_DAY,hourOfDay);
                                 c.set(Calendar.MINUTE,minute);
+                                c.set(Calendar.SECOND,00);
                                 c.setTimeZone(TimeZone.getDefault());
-                                SimpleDateFormat format=new SimpleDateFormat("h:mm a");
+
+                                SimpleDateFormat format=new SimpleDateFormat("h:mm:ss a");
                                 String time=format.format(c.getTime());
                                 tvtesttime.setText(time);
                             }
@@ -334,7 +338,9 @@ public class T_testslist extends Fragment {
         ettestname.setText(model.getTestname());
         tvtestdate.setText(model.getTestdate());
         tvtesttime.setText(model.getStarttime());
+
     }
+
     public void showloding() {
         progressDialog = new ProgressDialog(getActivity());
         progressDialog.show();

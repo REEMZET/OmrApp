@@ -1,64 +1,376 @@
 package com.reemzet.omr;
 
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
+import androidx.navigation.ui.NavigationUI;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager2.widget.CompositePageTransformer;
+import androidx.viewpager2.widget.MarginPageTransformer;
+import androidx.viewpager2.widget.ViewPager2;
 
+import android.os.Handler;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
+import android.widget.TextView;
+import android.widget.Toast;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link HomeStudent#newInstance} factory method to
- * create an instance of this fragment.
- */
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+import com.orhanobut.dialogplus.DialogPlus;
+import com.orhanobut.dialogplus.ViewHolder;
+import com.reemzet.omr.Adapter.SliderAdapter;
+import com.reemzet.omr.Adapter.TodaystestlistViewHolder;
+import com.reemzet.omr.Models.InstuteDetails;
+import com.reemzet.omr.Models.SliderMOdel;
+import com.reemzet.omr.Models.StudentsModel;
+import com.reemzet.omr.Models.TestDetails;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
+
+
 public class HomeStudent extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public HomeStudent() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment HomeStudent.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static HomeStudent newInstance(String param1, String param2) {
-        HomeStudent fragment = new HomeStudent();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
-
+    FirebaseDatabase database;
+    FirebaseAuth mAuth;
+    DatabaseReference posterref,TestListref,studentref;
+    ArrayList<SliderMOdel>posterlist;
+    ViewPager2 viewPager2;
+    Handler sliderhandler=new Handler();
+   String batch,studentcity;
+    NavController navController;
+    RecyclerView recyclerView;
+    ConstraintLayout contraintestlist,constraintbatch;
+    TestDetails testDetails;
+    TextView tvnotests;
+    DialogPlus dialog;
+    ProgressDialog progressDialog;
+    LinearLayout nobatchlayout;
+    Button btnfindbatch;
+    ScrollView homescroll;
+    StudentsModel studentsModel;
+    TextView tvinstruct;
+    FirebaseRecyclerAdapter<TestDetails, TodaystestlistViewHolder> adapter;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home_student, container, false);
+        View view= inflater.inflate(R.layout.fragment_home_student, container, false);
+        NavHostFragment navHostFragment =
+                (NavHostFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+        assert navHostFragment != null;
+        navController = navHostFragment.getNavController();
+
+
+        contraintestlist=view.findViewById(R.id.constrainttestlist);
+        constraintbatch=view.findViewById(R.id.constraintbatchlist);
+        recyclerView=view.findViewById(R.id.todaystudenttestrecycler);
+        nobatchlayout=view.findViewById(R.id.nobtchlayout);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
+        tvnotests=view.findViewById(R.id.tvnotests);
+        btnfindbatch=view.findViewById(R.id.btnfindbatch);
+        homescroll=view.findViewById(R.id.homescroll);
+        viewPager2=view.findViewById(R.id.viewpager2);
+        database=FirebaseDatabase.getInstance();
+        mAuth=FirebaseAuth.getInstance();
+        studentref=database.getReference("students");
+        checkbatch();
+
+
+        posterlist = new ArrayList<>();
+
+
+        progressDialog = new ProgressDialog(getActivity());
+        if (progressDialog.isShowing()){
+            progressDialog.dismiss();
+        }
+
+            contraintestlist.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Bundle bundle=new Bundle();
+                    bundle.putString("orgcode",batch);
+                    navController.navigate(R.id.studentList,bundle);
+                }
+            });
+
+            constraintbatch.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Bundle bundle=new Bundle();
+                    bundle.putString("city",studentcity);
+                    navController.navigate(R.id.requestBatch,bundle);
+                }
+            });
+
+        btnfindbatch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle=new Bundle();
+                bundle.putString("city",studentcity);
+                navController.navigate(R.id.requestBatch,bundle);
+            }
+        });
+
+
+        return view;
     }
+
+    private void checkbatch() {
+        studentref.child(mAuth.getUid()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()){
+                    studentsModel=snapshot.getValue(StudentsModel.class);
+                    batch=studentsModel.getBatch();
+                    studentcity=studentsModel.getStudentcity();
+                    posterref=database.getReference("institute").child(batch).child("slider");
+                    TestListref=database.getReference("institute").child(batch).child("TestList");
+                    setPoster();
+                    getdatafromserver();
+                    if (studentsModel.getBatch().equals("Nobatch")){
+                        nobatchlayout.setVisibility(View.VISIBLE);
+                        homescroll.setVisibility(View.GONE);
+                    }else {
+                        nobatchlayout.setVisibility(View.GONE);
+                        homescroll.setVisibility(View.VISIBLE);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    private void setPoster() {
+        posterref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                posterlist.clear();
+                for (DataSnapshot snap : snapshot.getChildren()) {
+                    SliderMOdel mOdel=snap.getValue(SliderMOdel.class);
+                    posterlist.add(mOdel);
+                }
+                SliderAdapter sliderAdapter=new SliderAdapter(posterlist,viewPager2);
+                viewPager2.setAdapter(sliderAdapter);
+                viewPager2.setOffscreenPageLimit(3);
+                viewPager2.setClipChildren(false);
+                viewPager2.setClipToPadding(false);
+                viewPager2.getChildAt(0).setOverScrollMode(RecyclerView.OVER_SCROLL_NEVER);
+                CompositePageTransformer transformer=new CompositePageTransformer();
+                transformer.addTransformer(new MarginPageTransformer(30));
+                transformer.addTransformer(new ViewPager2.PageTransformer() {
+                    @Override
+                    public void transformPage(@NonNull View page, float position) {
+                        float r=1-Math.abs(position);
+                        page.setScaleY(0.85f +r*0.14f);
+                    }
+                });
+                viewPager2.setPageTransformer(transformer);
+                viewPager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+                    @Override
+                    public void onPageSelected(int position) {
+                        super.onPageSelected(position);
+                        sliderhandler.removeCallbacks(sliderRunnable);
+                        sliderhandler.postDelayed(sliderRunnable,4000);
+                    }
+                });
+
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+
+            }
+        });
+    }
+    public void getdatafromserver(){
+        TestListref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()){
+                    testDetails=snapshot.getValue(TestDetails.class);
+                    setData();
+                    int i= (int) snapshot.getChildrenCount();
+                   tvnotests.setText(String.valueOf(i));
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+    }
+    public void setData(){
+        String date = new SimpleDateFormat("d/M/yyyy", Locale.getDefault()).format(new Date());
+        Query query =TestListref.orderByChild("testdate").startAt(date).endAt(date+ "\uf8ff");
+        FirebaseRecyclerOptions<TestDetails> options =
+                new FirebaseRecyclerOptions.Builder<TestDetails>()
+                        .setQuery(query, TestDetails.class)
+                        .build();
+
+        adapter=new FirebaseRecyclerAdapter<TestDetails, TodaystestlistViewHolder>(options){
+
+            @NonNull
+            @Override
+            public TodaystestlistViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                View rview = LayoutInflater.from(parent.getContext()).inflate(R.layout.todaytestlistlayout, parent, false);
+                return new TodaystestlistViewHolder(rview);
+            }
+
+            @Override
+            protected void onBindViewHolder(@NonNull TodaystestlistViewHolder holder, int position, @NonNull TestDetails model) {
+                holder.testname.setText(model.getTestname());
+                holder.totalquestion.setText("No.of Ques-"+model.getQuestionno());
+                holder.testtime.setText(model.getStarttime());
+                int totalmarks=Integer.parseInt(model.getCorrectmarks())*Integer.parseInt(model.getQuestionno());
+                holder.tvtotalmarks.setText("Marks-"+totalmarks);
+                totalmarks=0;
+                holder.duration.setText("  Duration\n   "+model.getTesttime()+"mins");
+                holder.date.setText("Date\n"+model.getTestdate());
+                holder.teststatus.setText(model.getStatus());
+                holder.editnow.setText("Start now");
+                holder.editnow.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        String currentTime = new SimpleDateFormat("h:mm:ss a", Locale.getDefault()).format(new Date());
+                            if(model.getStatus().equals("Ready")){
+                                dialog = DialogPlus.newDialog(getContext())
+                                        .setContentHolder(new ViewHolder(R.layout.testcodelayout))
+                                        .setGravity(Gravity.CENTER)
+                                        .create();
+                                dialog.show();
+                                View myview = dialog.getHolderView();
+                                TextView ok=myview.findViewById(R.id.btnsubmitcode);
+                                TextView cancel=myview.findViewById(R.id.cancel);
+                                  tvinstruct=myview.findViewById(R.id.testinstruction);
+                                EditText etcode=myview.findViewById(R.id.etcode);
+                                settestinstruction(model);
+                                cancel.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        dialog.dismiss();
+                                    }
+                                });
+                                ok.setOnClickListener(v1 -> {
+                                    if (etcode.getText().toString().equals(model.getTestcode())){
+                                        if (checktimings(model.getStarttime(),currentTime)){
+                                            dialog.dismiss();
+                                            Bundle bundle=new Bundle();
+                                            bundle.putString("orgcode",batch);
+                                            bundle.putString("testref",model.getTestid());
+                                            bundle.putString("studentimg",studentsModel.getImageurl());
+                                            bundle.putString("studentcity",studentcity);
+                                            bundle.putString("studentname",studentsModel.getStudenname());
+                                            navController.navigate(R.id.omr,bundle);
+                                        }else {
+                                            Toast.makeText(getActivity(), "Test Start on- "+model.getStarttime(), Toast.LENGTH_SHORT).show();
+                                        }
+                                    }else etcode.setError("WrongCode");
+                                });
+
+                            }else if (model.getStatus().equals("completed")){
+                                Toast.makeText(getActivity(), "Test is Over", Toast.LENGTH_SHORT).show();
+                            }else {
+                                Toast.makeText(getActivity(), "Test is not ready", Toast.LENGTH_SHORT).show();
+                            }
+
+                    }
+                });
+                if (holder.teststatus.getText().equals("Answer not Set")){
+                    holder.teststatus.setTextColor(Color.RED);
+                }
+            }
+        };
+        recyclerView.setAdapter(adapter);
+        adapter.startListening();
+    }
+
+
+
+
+    private Runnable sliderRunnable=new Runnable() {
+        @Override
+        public void run() {
+            viewPager2.setCurrentItem(viewPager2.getCurrentItem()+1);
+        }
+    };
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        sliderhandler.removeCallbacks(sliderRunnable);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+    sliderhandler.postDelayed(sliderRunnable,4000);
+    }
+    private boolean checktimings(String time,String endtime) {
+        String pattern = "h:mm:ss a";
+        SimpleDateFormat sdf = new SimpleDateFormat(pattern);
+        try {
+            Date date1 = sdf.parse(time);
+            Date date2 = sdf.parse(endtime);
+
+            if(date1.before(date2)) {
+                return true;
+            } else {
+
+                return false;
+            }
+        } catch (ParseException e){
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public void settestinstruction(TestDetails model){
+        tvinstruct.setText("1.Click ok on bottom to begin the test."+
+                "\n2.Do not click submit on the right corner unless complete your test." +
+                "\n3.For Every Correct answer you will get "+model.getCorrectmarks()+" marks and for every wrong "+model.getWrongmarks()+" marks." +
+                "\n4.You can get your score after the test completed.");
+    }
+
 }

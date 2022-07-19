@@ -40,6 +40,7 @@ import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.ViewHolder;
 import com.reemzet.omr.Adapter.TeacherTestListViewHolder;
 import com.reemzet.omr.Adapter.TodaystestlistViewHolder;
+import com.reemzet.omr.Models.InstuteDetails;
 import com.reemzet.omr.Models.TestDetails;
 
 import java.text.SimpleDateFormat;
@@ -52,20 +53,19 @@ import java.util.TimeZone;
 public class HomeTeacher extends Fragment {
 
 
-RecyclerView todaystestrecycler;
-NavController navController;
-FirebaseDatabase database;
-DatabaseReference TestListref;
-FirebaseAuth mAuth;
-TestDetails testDetails;
-TextView todaysdate,tvcreatetest;
-ConstraintLayout consttestlist;
+    RecyclerView todaystestrecycler;
+    NavController navController;
+    FirebaseDatabase database;
+    DatabaseReference TestListref;
+    TestDetails testDetails;
+    TextView todaysdate,tvcreatetest;
+    ConstraintLayout consttestlist,constraintupdate,constraintrequestlist;
     DialogPlus dialog;
     ImageView calendar,clock;
     int d,m,y,minute,hours;
-    TextView tvtestdate,tvtesttime;
+    TextView tvtestdate,tvtesttime,tvnooftest;
     EditText etnoofques,etduration,etcorrectmarks,etincorrectmarks,ettestcode,ettestname;
-    String noofques,testduration,correctmarks,incorrectmarks,testcode,testartstime,testdate,testname;
+    String noofques,testduration,correctmarks,incorrectmarks,testcode,testartstime,testdate,testname,orgcode;
     Button btnsubmit;
     ProgressDialog progressDialog;
     boolean fieldboolean;
@@ -82,27 +82,23 @@ ConstraintLayout consttestlist;
         todaysdate=view.findViewById(R.id.todaydate);
         consttestlist=view.findViewById(R.id.consttestlist);
         tvcreatetest=view.findViewById(R.id.createtest);
-
+        tvnooftest=view.findViewById(R.id.tvnotests);
+        constraintrequestlist=view.findViewById(R.id.constraintrequestlist);
 
 
         todaystestrecycler.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
-        NavHostFragment navHostFragment =
-                (NavHostFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+        NavHostFragment navHostFragment = (NavHostFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
         assert navHostFragment != null;
         navController = navHostFragment.getNavController();
-
-        mAuth=FirebaseAuth.getInstance();
+        orgcode=getArguments().getString("orgcode");
         database=FirebaseDatabase.getInstance();
-        TestListref=database.getReference("institute").child(mAuth.getUid()).child("TestList");
-
+        TestListref=database.getReference("institute").child(orgcode).child("TestList");
         setdatetohome();
         getdatafromserver();
-
-        consttestlist.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                navController.navigate(R.id.t_testslist);
-            }
+        consttestlist.setOnClickListener(v -> {
+            Bundle bundle=new Bundle();
+            bundle.putString("orgcode",orgcode);
+            navController.navigate(R.id.t_testslist,bundle);
         });
         tvcreatetest.setOnClickListener(v -> {
             dialog = DialogPlus.newDialog(getContext())
@@ -133,8 +129,9 @@ ConstraintLayout consttestlist;
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                         c.set(Calendar.HOUR_OF_DAY,hourOfDay);
                         c.set(Calendar.MINUTE,minute);
+                        c.set(Calendar.SECOND,00);
                         c.setTimeZone(TimeZone.getDefault());
-                        SimpleDateFormat format=new SimpleDateFormat("h:mm a");
+                        SimpleDateFormat format=new SimpleDateFormat("h:mm:ss a");
                         String time=format.format(c.getTime());
                         tvtesttime.setText(time);
                     }
@@ -149,10 +146,12 @@ ConstraintLayout consttestlist;
                     showloding();
                     dialogdatavalidation();
                     if (fieldboolean){
-                        TestDetails testDetails =new TestDetails(testname,noofques,testduration,correctmarks,incorrectmarks,testartstime,testcode,testdate,"Answer not Set");
-                        TestListref.push().setValue(testDetails).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        String testid=TestListref.push().getKey();
+                        TestDetails testDetails =new TestDetails(testname,noofques,testduration,correctmarks,incorrectmarks,testartstime,testcode,testdate,"Answer not Set",testid,"notpub");
+                        TestListref.child(testid).setValue(testDetails).addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
+
                                 dialog.dismiss();
                                 progressDialog.dismiss();
                             }
@@ -163,6 +162,15 @@ ConstraintLayout consttestlist;
                 }
             });
         });
+
+
+        constraintrequestlist.setOnClickListener(v -> {
+            Bundle bundle=new Bundle();
+            bundle.putString("orgcode",orgcode);
+            navController.navigate(R.id.requestList,bundle);
+        });
+
+
         return view;
 
     }
@@ -170,10 +178,12 @@ ConstraintLayout consttestlist;
         TestListref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-
                 if (snapshot.exists()){
                     testDetails=snapshot.getValue(TestDetails.class);
                     setData();
+                    int i= (int) snapshot.getChildrenCount();
+                    tvnooftest.setText(String.valueOf(i));
+
                 }
 
             }
@@ -186,7 +196,6 @@ ConstraintLayout consttestlist;
     }
     public void setData(){
         String date = new SimpleDateFormat("d/M/yyyy", Locale.getDefault()).format(new Date());
-
         Query query =TestListref.orderByChild("testdate").startAt(date).endAt(date+ "\uf8ff");
         FirebaseRecyclerOptions<TestDetails> options =
                 new FirebaseRecyclerOptions.Builder<TestDetails>()

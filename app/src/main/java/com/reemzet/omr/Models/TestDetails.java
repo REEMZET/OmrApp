@@ -2,13 +2,14 @@ package com.reemzet.omr.Models;
 
 public class TestDetails {
 
-    String testname,questionno,testtime,correctmarks,wrongmarks,starttime,testcode,testdate,status;
+    String testname,questionno,testtime,correctmarks,wrongmarks,starttime,testcode,testdate,status,testid,resultstatus;
+
 
     public TestDetails() {
 
     }
 
-    public TestDetails(String testname, String questionno, String testtime, String correctmarks, String wrongmarks, String starttime, String testcode, String testdate, String status) {
+    public TestDetails(String testname, String questionno, String testtime, String correctmarks, String wrongmarks, String starttime, String testcode, String testdate, String status, String testid, String resultstatus) {
         this.testname = testname;
         this.questionno = questionno;
         this.testtime = testtime;
@@ -18,17 +19,8 @@ public class TestDetails {
         this.testcode = testcode;
         this.testdate = testdate;
         this.status = status;
-    }
-
-    public TestDetails(String testname, String questionno, String testtime, String correctmarks, String wrongmarks, String starttime, String testcode, String testdate) {
-        this.testname = testname;
-        this.questionno = questionno;
-        this.testtime = testtime;
-        this.correctmarks = correctmarks;
-        this.wrongmarks = wrongmarks;
-        this.starttime = starttime;
-        this.testcode = testcode;
-        this.testdate = testdate;
+        this.testid = testid;
+        this.resultstatus = resultstatus;
     }
 
     public String getTestname() {
@@ -101,5 +93,21 @@ public class TestDetails {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getTestid() {
+        return testid;
+    }
+
+    public void setTestid(String testid) {
+        this.testid = testid;
+    }
+
+    public String getResultstatus() {
+        return resultstatus;
+    }
+
+    public void setResultstatus(String resultstatus) {
+        this.resultstatus = resultstatus;
     }
 }

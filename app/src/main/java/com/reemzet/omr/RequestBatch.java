@@ -1,64 +1,233 @@
 package com.reemzet.omr;
 
+import android.graphics.Color;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.TextView;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link RequestBatch#newInstance} factory method to
- * create an instance of this fragment.
- */
+import com.bumptech.glide.Glide;
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+import com.reemzet.omr.Adapter.BatchlistViewHolder;
+import com.reemzet.omr.Adapter.TodaystestlistViewHolder;
+import com.reemzet.omr.Models.InstuteDetails;
+import com.reemzet.omr.Models.StudentsModel;
+import com.reemzet.omr.Models.TestDetails;
+
+import java.util.HashMap;
+
+
 public class RequestBatch extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public RequestBatch() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment RequestBatch.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static RequestBatch newInstance(String param1, String param2) {
-        RequestBatch fragment = new RequestBatch();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
+    NavController navController;
+    FirebaseDatabase database;
+    DatabaseReference batchref,studentref,instituteref;
+    RecyclerView recyclerView;
+    EditText editText;
+    String city;
+    InstuteDetails instuteDetails;
+    Query batch;
+    TextView tvsuggestion;
+    FirebaseRecyclerAdapter<InstuteDetails, BatchlistViewHolder> adapter;
+    FirebaseAuth mAuth;
+    StudentsModel studentsModel;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_request_batch, container, false);
+        View view= inflater.inflate(R.layout.fragment_request_batch, container, false);
+        recyclerView=view.findViewById(R.id.batchrecyclerview);
+        editText=view.findViewById(R.id.etsearch);
+        tvsuggestion=view.findViewById(R.id.tvsuggestion);
+        city=getArguments().getString("city");
+
+        mAuth=FirebaseAuth.getInstance();
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+        NavHostFragment navHostFragment = (NavHostFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+        assert navHostFragment != null;
+        navController = navHostFragment.getNavController();
+        database=FirebaseDatabase.getInstance();
+        batchref=database.getReference("Organisation");
+        instituteref=database.getReference("institute");
+        studentref=database.getReference().child("students").child(mAuth.getUid());
+
+        getStudentData();
+        editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                    if (s.length()==0){
+                        tvsuggestion.setVisibility(View.VISIBLE);
+                        batch =batchref.orderByChild("city").startAt(city).endAt(city+ "\uf8ff");
+                        getdatafromserver();
+                    }else {
+                        tvsuggestion.setVisibility(View.GONE);
+                        batch =batchref.orderByChild("orgcode").startAt(s.toString()).endAt(s+ "\uf8ff");
+                        getdatafromserver();
+                    }
+            }
+        });
+
+
+
+        return view;
+    }
+
+    private void getStudentData() {
+        studentref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()){
+                    studentsModel=snapshot.getValue(StudentsModel.class);
+                    batch =batchref.orderByChild("city").startAt(city).endAt(city+ "\uf8ff");
+                    getdatafromserver();
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+
+    public void getdatafromserver(){
+
+        batchref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()){
+                    instuteDetails=snapshot.getValue(InstuteDetails.class);
+                    setData();
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    private void setData() {
+        FirebaseRecyclerOptions<InstuteDetails> options =
+                new FirebaseRecyclerOptions.Builder<InstuteDetails>()
+                        .setQuery(batch, InstuteDetails.class)
+                        .build();
+
+
+        adapter=new FirebaseRecyclerAdapter<InstuteDetails, BatchlistViewHolder>(options) {
+            @Override
+            protected void onBindViewHolder(@NonNull BatchlistViewHolder holder, int position, @NonNull InstuteDetails model) {
+                if (studentsModel.getRequestedbatch().equals(model.getOrgcode())){
+                    holder.tvsendrequest.setText("Request Sent");
+                    holder.tvsendrequest.setBackgroundResource(R.drawable.bg_gray);
+                    holder.tvsendrequest.setTextColor(getResources().getColor(R.color.dselect));
+                    holder.tvsendrequest.setEnabled(false);
+                }else {
+                    holder.tvsendrequest.setText("Send Request");
+                    holder.tvsendrequest.setEnabled(true);
+                    holder.tvsendrequest.setTextColor(Color.WHITE);
+                    holder.tvsendrequest.setBackgroundResource(R.drawable.editnowbg);
+                }
+                if (studentsModel.getBatch().equals(model.getOrgcode())){
+                    holder.tvsendrequest.setText("Joined");
+                    holder.tvsendrequest.setBackgroundResource(R.drawable.bg_gray);
+                    holder.tvsendrequest.setTextColor(getResources().getColor(R.color.dselect));
+                    holder.tvsendrequest.setEnabled(false);
+                }
+                holder.tvteachername.setText("Teacher:-"+model.getTeachername());
+                holder.tvorgcode.setText("OrgCode:-"+model.getOrgcode());
+                holder.tvinstitutecity.setText("City:-"+model.getCity());
+                holder.tvinstitutestate.setText("State:-"+model.getState());
+                holder.tvinsitutename.setText(model.getInstitutename());
+                Glide.with(getActivity())
+                        .load(model.getInstituteimage())
+                        .centerCrop()
+                        .placeholder(R.drawable.university)
+                        .into(holder.instituteimage);
+                holder.tvsendrequest.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+
+                            if (studentsModel.getRequestedbatch().equals("NoRequestedBatch")){
+                                instituteref.child(model.getOrgcode()).child("BatchrequestList").child(mAuth.getUid()).setValue(studentsModel).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        studentref.child("requestedbatch").setValue(model.getOrgcode()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+
+                                            }
+                                        });
+                                    }
+                                });
+                            }else {
+                                instituteref.child(studentsModel.getRequestedbatch()).child("BatchrequestList").child(mAuth.getUid()).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        instituteref.child(model.getOrgcode()).child("BatchrequestList").child(mAuth.getUid()).setValue(studentsModel).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                studentref.child("requestedbatch").setValue(model.getOrgcode()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                    @Override
+                                                    public void onComplete(@NonNull Task<Void> task) {
+
+                                                    }
+                                                });
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+                    }
+                });
+            }
+
+            @NonNull
+            @Override
+            public BatchlistViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                View rview = LayoutInflater.from(parent.getContext()).inflate(R.layout.batchlistlayout, parent, false);
+                return new BatchlistViewHolder(rview);
+            }
+        };
+        recyclerView.setAdapter(adapter);
+        adapter.startListening();
     }
 }

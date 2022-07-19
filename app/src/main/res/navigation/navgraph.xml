@@ -51,6 +51,9 @@
         <action
             android:id="@+id/action_homeStudent_to_tests"
             app:destination="@id/tests" />
+        <action
+            android:id="@+id/action_homeStudent_to_studentList"
+            app:destination="@id/studentList" />
     </fragment>
     <fragment
         android:id="@+id/homeTeacher"
@@ -63,9 +66,6 @@
         <action
             android:id="@+id/action_homeTeacher_to_t_testslist"
             app:destination="@id/t_testslist" />
-        <action
-            android:id="@+id/action_homeTeacher_to_studentList"
-            app:destination="@id/studentList" />
         <action
             android:id="@+id/action_homeTeacher_to_createTest"
             app:destination="@id/createTest" />
@@ -83,15 +83,16 @@
         <action
             android:id="@+id/action_tests_to_omr"
             app:destination="@id/omr" />
-        <action
-            android:id="@+id/action_tests_to_report"
-            app:destination="@id/report" />
     </fragment>
     <fragment
         android:id="@+id/omr"
         android:name="com.reemzet.omr.Omr"
         android:label="fragment_omr"
-        tools:layout="@layout/fragment_omr" />
+        tools:layout="@layout/fragment_omr" >
+        <action
+            android:id="@+id/action_omr_to_report"
+            app:destination="@id/report" />
+    </fragment>
     <fragment
         android:id="@+id/report"
         android:name="com.reemzet.omr.Report"
@@ -119,9 +120,13 @@
     </fragment>
     <fragment
         android:id="@+id/studentList"
-        android:name="com.reemzet.omr.StudentList"
+        android:name="com.reemzet.omr.StudentTestList"
         android:label="fragment_student_list"
-        tools:layout="@layout/fragment_student_list" />
+        tools:layout="@layout/studenttestlist" >
+        <action
+            android:id="@+id/action_studentList_to_score"
+            app:destination="@id/score" />
+    </fragment>
     <fragment
         android:id="@+id/createTest"
         android:name="com.reemzet.omr.CreateTest"
@@ -150,4 +155,18 @@
             android:id="@+id/action_registerStudent_to_homeStudent"
             app:destination="@id/homeStudent" />
     </fragment>
+    <fragment
+        android:id="@+id/score"
+        android:name="com.reemzet.omr.Score"
+        android:label="fragment_score"
+        tools:layout="@layout/fragment_score" >
+        <action
+            android:id="@+id/action_score_to_leaderBoard"
+            app:destination="@id/leaderBoard" />
+    </fragment>
+    <fragment
+        android:id="@+id/leaderBoard"
+        android:name="com.reemzet.omr.LeaderBoard"
+        android:label="fragment_leader_board"
+        tools:layout="@layout/fragment_leader_board" />
 </navigation>

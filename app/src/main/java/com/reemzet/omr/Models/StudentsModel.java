@@ -1,18 +1,22 @@
 package com.reemzet.omr.Models;
 
 public class StudentsModel {
-  String  studenname,studentphone,studentcity,studentemail,preparation,batch;
+    String studenname, studentphone, studentcity, studentstates, studentemail,preparation,batch,studentuid,requestedbatch,imageurl;
 
     public StudentsModel() {
     }
 
-    public StudentsModel(String studenname, String studentphone, String studentcity, String studentemail, String preparation, String batch) {
+    public StudentsModel(String studenname, String studentphone, String studentcity, String studentstates, String studentemail, String preparation, String batch, String studentuid, String requestedbatch, String imageurl) {
         this.studenname = studenname;
         this.studentphone = studentphone;
         this.studentcity = studentcity;
+        this.studentstates = studentstates;
         this.studentemail = studentemail;
         this.preparation = preparation;
         this.batch = batch;
+        this.studentuid = studentuid;
+        this.requestedbatch = requestedbatch;
+        this.imageurl = imageurl;
     }
 
     public String getStudenname() {
@@ -39,6 +43,14 @@ public class StudentsModel {
         this.studentcity = studentcity;
     }
 
+    public String getStudentstates() {
+        return studentstates;
+    }
+
+    public void setStudentstates(String studentstates) {
+        this.studentstates = studentstates;
+    }
+
     public String getStudentemail() {
         return studentemail;
     }
@@ -61,5 +73,29 @@ public class StudentsModel {
 
     public void setBatch(String batch) {
         this.batch = batch;
+    }
+
+    public String getStudentuid() {
+        return studentuid;
+    }
+
+    public void setStudentuid(String studentuid) {
+        this.studentuid = studentuid;
+    }
+
+    public String getRequestedbatch() {
+        return requestedbatch;
+    }
+
+    public void setRequestedbatch(String requestedbatch) {
+        this.requestedbatch = requestedbatch;
+    }
+
+    public String getImageurl() {
+        return imageurl;
+    }
+
+    public void setImageurl(String imageurl) {
+        this.imageurl = imageurl;
     }
 }

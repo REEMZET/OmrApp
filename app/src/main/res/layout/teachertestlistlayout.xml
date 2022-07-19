@@ -33,6 +33,7 @@
                 android:fontFamily="@font/adamina"
                 android:text="SSC JE 2022"
                 android:textColor="#020202"
+                android:textSize="16sp"
                 android:textStyle="bold" />
 
             <TextView
@@ -72,7 +73,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="Pending" />
+                android:text="Pending"
+                android:textColor="#2B2B2B" />
 
             <TextView
                 android:id="@+id/testtotalmarks"
@@ -97,16 +99,23 @@
                 android:layout_height="match_parent"
 
 
-                android:layout_weight="1"
                 android:text="Duration-2 hours"
                 android:textColor="#F44336" />
+
+            <TextView
+                android:id="@+id/tvtestcode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="TextView"
+                android:textColor="#3E3E3E" />
 
             <TextView
                 android:id="@+id/tvdate"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginEnd="3dp"
-                android:layout_weight="1"
                 android:gravity="end"
                 android:text="Date-7/2022"
                 android:textColor="#455DDF" />

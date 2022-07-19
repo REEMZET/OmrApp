@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.reemzet.omr.R;
 
 public class TeacherTestListViewHolder extends RecyclerView.ViewHolder {
-    public TextView testname,testtime,totalquestion,tvtotalmarks,editnow,duration,date,tteststatus,tvsetanswer,tvdeletebtn,tvreport;
+    public TextView testname,testtime,totalquestion,tvtotalmarks,editnow,duration,date,tteststatus,tvsetanswer,tvdeletebtn,tvreport,tvtestcode;
     public TeacherTestListViewHolder(@NonNull View itemView) {
         super(itemView);
         testname=itemView.findViewById(R.id.testname);
@@ -23,6 +23,7 @@ public class TeacherTestListViewHolder extends RecyclerView.ViewHolder {
         tvsetanswer=itemView.findViewById(R.id.tvsetanswer);
         tvdeletebtn=itemView.findViewById(R.id.tvdelete);
         tvreport=itemView.findViewById(R.id.tvreport);
+        tvtestcode=itemView.findViewById(R.id.tvtestcode);
 
     }
 }

@@ -27,6 +27,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.reemzet.omr.Models.InstuteDetails;
+import com.reemzet.omr.Models.StudentsModel;
+
+import org.w3c.dom.Document;
+
+import java.text.SimpleDateFormat;
 
 public class MainActivity extends AppCompatActivity {
     DrawerLayout drawerLayout;
@@ -42,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
     ImageView loginuserpic,logout;
     ProgressDialog progressDialog;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,13 +57,11 @@ public class MainActivity extends AppCompatActivity {
         navigationView = findViewById(R.id.nav_view);
         logout=findViewById(R.id.logout);
 
-
-
         NavHostFragment navHostFragment =
                 (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
         assert navHostFragment != null;
         navController = navHostFragment.getNavController();
-
+        setupnavigation();
         hidenav();
 
         mAuth = FirebaseAuth.getInstance();
@@ -65,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
         teacherref=database.getReference("Teacherlist");
         instituteref=database.getReference("institute");
         studentref=database.getReference("students");
+
 
 
         View headerView=navigationView.getHeaderView(0);
@@ -76,59 +81,8 @@ public class MainActivity extends AppCompatActivity {
         videonav=headerView.findViewById(R.id.videonav);
         homenav=headerView.findViewById(R.id.homenav);
 
-            showloding();
-        if (mAuth.getCurrentUser()!=null&& mAuth.getUid()!=null){
-            teacherref.orderByChild(mAuth.getUid()).addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    if (snapshot.exists()){
-                        teacherref.child(mAuth.getUid()).addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-
-                                InstuteDetails instuteDetails=snapshot.getValue(InstuteDetails.class);
-                                navController.popBackStack();
-                                navController.navigate(R.id.homeTeacher);
-                                loginusername.setText(instuteDetails.getTeachername());
-                                loginuserphonno.setText(instuteDetails.getTeacherphone());
-                                setupnavigation();
-                                progressDialog.dismiss();
-                            }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError error) {
-
-                            }
-                        });
 
 
-                    }else {
-                        studentref.child(mAuth.getUid()).addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                navController.popBackStack();
-                                navController.navigate(R.id.homeStudent);
-                                progressDialog.dismiss();
-                            }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError error) {
-
-                            }
-                        });
-
-                    }
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-
-                }
-            });
-
-        }else{
-            progressDialog.dismiss();
-        }
 
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -139,7 +93,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-    }
+}
+
     public void setupnavigation(){
         NavigationUI.setupWithNavController(navigationView, navController);
         toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open, R.string.close);
@@ -149,20 +104,35 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void hidenav(){
-        navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
-            if (destination.getId()==R.id.welCome ){
-                toolbar.setVisibility(View.GONE);
-            }
-            else if (destination.getId()==R.id.omr){
-                toolbar.setVisibility(View.GONE);
-            }
-            else if (destination.getId()==R.id.register){
-                toolbar.setVisibility(View.GONE);
-            }
-            else {
-                toolbar.setVisibility(View.VISIBLE);
 
+        navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
+          int id=destination.getId();
+            switch (id){
+                case R.id.homeStudent:
+                    toolbar.setVisibility(View.VISIBLE);
+                    break;
+                case R.id.homeTeacher:
+                    toolbar.setVisibility(View.VISIBLE);
+                    break;
+                case R.id.t_testslist:
+                    toolbar.setVisibility(View.VISIBLE);
+                    break;
+                case R.id.studentList:
+                    toolbar.setVisibility(View.VISIBLE);
+                    break;
+                case R.id.setAnswer:
+                    toolbar.setVisibility(View.VISIBLE);
+                    break;
+                case R.id.testReport:
+                    toolbar.setVisibility(View.VISIBLE);
+                    break;
+                case R.id.score:
+                    toolbar.setVisibility(View.VISIBLE);
+                    break;
+                default:toolbar.setVisibility(View.GONE);
             }
+
+
         });
     }
     public void showloding() {
@@ -172,4 +142,20 @@ public class MainActivity extends AppCompatActivity {
         progressDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         progressDialog.setCanceledOnTouchOutside(false);
     }
+
+
+
+/*    @Override
+    public void onResume() {
+        super.onResume();
+        checkloginuser();
+    }*/
+
+  /*  @Override
+    protected void onStart() {
+        super.onStart();
+        checkloginuser();
+    }*/
 }
+
+
