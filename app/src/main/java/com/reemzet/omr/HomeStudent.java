@@ -76,7 +76,7 @@ public class HomeStudent extends Fragment {
    String batch,studentcity;
     NavController navController;
     RecyclerView recyclerView;
-    ConstraintLayout contraintestlist,constraintbatch;
+    ConstraintLayout contraintestlist,constraintbatch,constraintreport;
     TestDetails testDetails;
     TextView tvnotests;
     DialogPlus dialog;
@@ -85,7 +85,8 @@ public class HomeStudent extends Fragment {
     Button btnfindbatch;
     ScrollView homescroll;
     StudentsModel studentsModel;
-    TextView tvinstruct;
+    TextView tvinstruct,todaysdate;
+
     FirebaseRecyclerAdapter<TestDetails, TodaystestlistViewHolder> adapter;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -99,6 +100,7 @@ public class HomeStudent extends Fragment {
 
         contraintestlist=view.findViewById(R.id.constrainttestlist);
         constraintbatch=view.findViewById(R.id.constraintbatchlist);
+        constraintreport=view.findViewById(R.id.constraintreport);
         recyclerView=view.findViewById(R.id.todaystudenttestrecycler);
         nobatchlayout=view.findViewById(R.id.nobtchlayout);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
@@ -106,11 +108,12 @@ public class HomeStudent extends Fragment {
         btnfindbatch=view.findViewById(R.id.btnfindbatch);
         homescroll=view.findViewById(R.id.homescroll);
         viewPager2=view.findViewById(R.id.viewpager2);
+        todaysdate=view.findViewById(R.id.todaydate);
         database=FirebaseDatabase.getInstance();
         mAuth=FirebaseAuth.getInstance();
         studentref=database.getReference("students");
         checkbatch();
-
+        setdatetohome();
 
         posterlist = new ArrayList<>();
 
@@ -144,6 +147,14 @@ public class HomeStudent extends Fragment {
                 Bundle bundle=new Bundle();
                 bundle.putString("city",studentcity);
                 navController.navigate(R.id.requestBatch,bundle);
+            }
+        });
+        constraintreport.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle=new Bundle();
+                bundle.putString("orgcode",batch);
+                navController.navigate(R.id.report,bundle) ;
             }
         });
 
@@ -295,14 +306,17 @@ public class HomeStudent extends Fragment {
                                 ok.setOnClickListener(v1 -> {
                                     if (etcode.getText().toString().equals(model.getTestcode())){
                                         if (checktimings(model.getStarttime(),currentTime)){
-                                            dialog.dismiss();
-                                            Bundle bundle=new Bundle();
-                                            bundle.putString("orgcode",batch);
-                                            bundle.putString("testref",model.getTestid());
-                                            bundle.putString("studentimg",studentsModel.getImageurl());
-                                            bundle.putString("studentcity",studentcity);
-                                            bundle.putString("studentname",studentsModel.getStudenname());
-                                            navController.navigate(R.id.omr,bundle);
+                                            if (checktestperoid(model.getStarttime(),Integer.parseInt(model.getTesttime()))){
+                                                dialog.dismiss();
+                                                Bundle bundle=new Bundle();
+                                                bundle.putString("orgcode",batch);
+                                                bundle.putString("testref",model.getTestid());
+                                                bundle.putString("studentimg",studentsModel.getImageurl());
+                                                bundle.putString("studentcity",studentcity);
+                                                bundle.putString("studentname",studentsModel.getStudenname());
+                                                navController.navigate(R.id.omr,bundle);
+                                            }else  Toast.makeText(getActivity(), "Test is Over", Toast.LENGTH_SHORT).show();
+
                                         }else {
                                             Toast.makeText(getActivity(), "Test Start on- "+model.getStarttime(), Toast.LENGTH_SHORT).show();
                                         }
@@ -320,6 +334,7 @@ public class HomeStudent extends Fragment {
                 if (holder.teststatus.getText().equals("Answer not Set")){
                     holder.teststatus.setTextColor(Color.RED);
                 }
+
             }
         };
         recyclerView.setAdapter(adapter);
@@ -350,6 +365,7 @@ public class HomeStudent extends Fragment {
     private boolean checktimings(String time,String endtime) {
         String pattern = "h:mm:ss a";
         SimpleDateFormat sdf = new SimpleDateFormat(pattern);
+
         try {
             Date date1 = sdf.parse(time);
             Date date2 = sdf.parse(endtime);
@@ -371,6 +387,49 @@ public class HomeStudent extends Fragment {
                 "\n2.Do not click submit on the right corner unless complete your test." +
                 "\n3.For Every Correct answer you will get "+model.getCorrectmarks()+" marks and for every wrong "+model.getWrongmarks()+" marks." +
                 "\n4.You can get your score after the test completed.");
+    }
+    public boolean checktestperoid(String testtime,int duration){
+       // String myTime = "14:10";
+
+        SimpleDateFormat df = new SimpleDateFormat("h:mm:ss a");
+        Date d = null;
+        try {
+            d = df.parse(testtime);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(d);
+        cal.add(Calendar.MINUTE, duration);
+        String newTime = df.format(cal.getTime());
+
+        String currentTime = new SimpleDateFormat("h:mm:ss a", Locale.getDefault()).format(new Date());
+        String pattern = "h:mm:ss a";
+        SimpleDateFormat sdf = new SimpleDateFormat(pattern);
+
+        try {
+            Date date1 = sdf.parse(newTime);
+            Date date2 = sdf.parse(currentTime);
+
+            if(date1.before(date2)) {
+
+                return false;
+
+            } else {
+                
+                return true;
+
+            }
+        } catch (ParseException e){
+            e.printStackTrace();
+        }
+        return false;
+    }
+    public void setdatetohome(){
+        Date cd = Calendar.getInstance().getTime();
+        SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy", Locale.getDefault());
+        String formattedDate = df.format(cd);
+        todaysdate.setText(formattedDate);
     }
 
 }

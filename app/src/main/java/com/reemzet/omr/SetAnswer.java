@@ -14,6 +14,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -44,7 +46,7 @@ public class SetAnswer extends Fragment {
 
     Button submitanswerbtn;
     ProgressDialog progressDialog;
-    boolean checked;
+    NavController navController;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -61,6 +63,11 @@ public class SetAnswer extends Fragment {
         answerrecyclerview = view.findViewById(R.id.answerrecycler);
         answerrecyclerview.setLayoutManager(new LinearLayoutManager(getActivity()));
         submitanswerbtn = view.findViewById(R.id.submitanswerbtn);
+
+        NavHostFragment navHostFragment = (NavHostFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+        assert navHostFragment != null;
+        navController = navHostFragment.getNavController();
+
 
         if (!testkey.isEmpty()) {
             answerlistref = database.getReferenceFromUrl(testkey).child("answerlist");
@@ -226,7 +233,7 @@ public class SetAnswer extends Fragment {
                 }
             });
             submitanswerbtn.setOnClickListener(v -> {
-                    //checkallchecked();
+                showloding();
                 if (checkallchecked()){
                         for (int i = 0; i < selectedanswer.size(); i++) {
                             int b = 1;
@@ -241,11 +248,13 @@ public class SetAnswer extends Fragment {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             Toast.makeText(getContext(), "answer set Successfully", Toast.LENGTH_SHORT).show();
+                            progressDialog.dismiss();
                         }
                     });
 
                 }else {
                     Toast.makeText(getContext(), "Please select all option", Toast.LENGTH_SHORT).show();
+                    progressDialog.dismiss();
                 }
 
 

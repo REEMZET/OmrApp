@@ -256,6 +256,7 @@
                     app:cardCornerRadius="4dp">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/constraintjoinedstudent"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="#B9FFEB3B">

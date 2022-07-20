@@ -56,10 +56,10 @@ public class HomeTeacher extends Fragment {
     RecyclerView todaystestrecycler;
     NavController navController;
     FirebaseDatabase database;
-    DatabaseReference TestListref;
+    DatabaseReference TestListref,requestlistref;
     TestDetails testDetails;
-    TextView todaysdate,tvcreatetest;
-    ConstraintLayout consttestlist,constraintupdate,constraintrequestlist;
+    TextView todaysdate,tvcreatetest,tvnoofrequest;
+    ConstraintLayout consttestlist,constraintupdate,constraintrequestlist,constraintjoinedstudent;
     DialogPlus dialog;
     ImageView calendar,clock;
     int d,m,y,minute,hours;
@@ -69,6 +69,7 @@ public class HomeTeacher extends Fragment {
     Button btnsubmit;
     ProgressDialog progressDialog;
     boolean fieldboolean;
+
 
     FirebaseRecyclerAdapter<TestDetails, TodaystestlistViewHolder> adapter;
 
@@ -83,8 +84,10 @@ public class HomeTeacher extends Fragment {
         consttestlist=view.findViewById(R.id.consttestlist);
         tvcreatetest=view.findViewById(R.id.createtest);
         tvnooftest=view.findViewById(R.id.tvnotests);
+        tvnoofrequest=view.findViewById(R.id.tvnoofrequest);
         constraintrequestlist=view.findViewById(R.id.constraintrequestlist);
-
+        constraintupdate=view.findViewById(R.id.constraintupdate);
+        constraintjoinedstudent=view.findViewById(R.id.constraintjoinedstudent);
 
         todaystestrecycler.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
         NavHostFragment navHostFragment = (NavHostFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
@@ -93,8 +96,10 @@ public class HomeTeacher extends Fragment {
         orgcode=getArguments().getString("orgcode");
         database=FirebaseDatabase.getInstance();
         TestListref=database.getReference("institute").child(orgcode).child("TestList");
+        requestlistref=database.getReference("institute").child(orgcode).child("BatchrequestList");
         setdatetohome();
         getdatafromserver();
+        setnoofrequestlist();
         consttestlist.setOnClickListener(v -> {
             Bundle bundle=new Bundle();
             bundle.putString("orgcode",orgcode);
@@ -169,7 +174,21 @@ public class HomeTeacher extends Fragment {
             bundle.putString("orgcode",orgcode);
             navController.navigate(R.id.requestList,bundle);
         });
-
+        constraintupdate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AppUpdateChecker appUpdateChecker = new AppUpdateChecker(getActivity());
+                appUpdateChecker.checkForUpdate(true);
+            }
+        });
+        constraintjoinedstudent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle=new Bundle();
+                bundle.putString("orgcode",orgcode);
+                navController.navigate(R.id.joinedStudent,bundle);
+            }
+        });
 
         return view;
 
@@ -183,17 +202,14 @@ public class HomeTeacher extends Fragment {
                     setData();
                     int i= (int) snapshot.getChildrenCount();
                     tvnooftest.setText(String.valueOf(i));
-
-                }
-
+                }else tvnooftest.setText("0");
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
             }
         });
     }
+
     public void setData(){
         String date = new SimpleDateFormat("d/M/yyyy", Locale.getDefault()).format(new Date());
         Query query =TestListref.orderByChild("testdate").startAt(date).endAt(date+ "\uf8ff");
@@ -222,15 +238,26 @@ public class HomeTeacher extends Fragment {
                     holder.duration.setText("  Duration\n   "+model.getTesttime()+"mins");
                     holder.date.setText("Date\n"+model.getTestdate());
                     holder.teststatus.setText(model.getStatus());
+
                     holder.editnow.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            navController.navigate(R.id.omr);
+                            Bundle bundle=new Bundle();
+                            bundle.putString("testkey",String.valueOf(TestListref.child(getRef(holder.getAdapterPosition()).getKey())));
+                            navController.navigate(R.id.setAnswer,bundle);
                         }
                     });
                     if (holder.teststatus.getText().equals("Answer not Set")){
                         holder.teststatus.setTextColor(Color.RED);
+                        holder.editnow.setEnabled(true);
+                        holder.editnow.setText("Set answer");
+                    }else if(holder.teststatus.getText().equals("completed")){
+                        holder.editnow.setEnabled(false);
+                    }else {
+                        holder.editnow.setEnabled(true);
+                        holder.editnow.setText("edit answer");
                     }
+
             }
         };
         todaystestrecycler.setAdapter(adapter);
@@ -331,6 +358,23 @@ public class HomeTeacher extends Fragment {
         SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy", Locale.getDefault());
         String formattedDate = df.format(cd);
         todaysdate.setText(formattedDate);
+    }
+
+    public void setnoofrequestlist(){
+        requestlistref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()){
+                    int i= (int) snapshot.getChildrenCount();
+                    tvnoofrequest.setText(String.valueOf(i));
+                }else tvnoofrequest.setText("0");
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
 }

@@ -28,7 +28,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.reemzet.omr.Models.ScoreModel;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 
 public class Score extends Fragment {
@@ -36,11 +41,11 @@ public class Score extends Fragment {
     PieChart pieChart;
     FirebaseDatabase database;
     DatabaseReference scoreref;
-    ScoreModel scoreModel;
-    String orgcode,testid;
+
+    String orgcode,testid,teststarttime,testduration;
     FirebaseAuth mAuth;
     ProgressDialog progressDialog;
-    int  totalmarks,correctquestion,unattempedquestion,totalquestion;
+    int  totalmarks,correctquestion,unattempedquestion,totalquestion,eachcorrectmarks;
     TextView tvobtainedmarks,tvtotalque,tvcorectans,tvincorrect;
     LinearLayout linearleaderboard;
     NavController navController;
@@ -55,6 +60,9 @@ public class Score extends Fragment {
         correctquestion=Integer.parseInt(getArguments().getString("correctquestion"));
         unattempedquestion=Integer.parseInt(getArguments().getString("unattempedquestion"));
        totalquestion=Integer.parseInt(getArguments().getString("totalquestion"));
+        eachcorrectmarks=Integer.parseInt(getArguments().getString("eachcorrectmarks"));
+        teststarttime=getArguments().getString("teststarttime");
+        testduration=getArguments().getString("testduration");
         pieChart=view.findViewById(R.id.scorepiechart);
         tvobtainedmarks=view.findViewById(R.id.tvobtainedmarks);
         tvtotalque=view.findViewById(R.id.tvtotalque);
@@ -97,7 +105,7 @@ public class Score extends Fragment {
     }
     public void loadpiechart(){
         int marksobtained=totalmarks;
-        int deductedmarks=totalquestion*4-(marksobtained);
+        int deductedmarks=totalquestion*eachcorrectmarks-(marksobtained);
         ArrayList<PieEntry> records=new ArrayList<>();
         records.add(new PieEntry(marksobtained,"Obtained Marks"));
         records.add(new PieEntry(deductedmarks,"Lost Marks"));
@@ -109,7 +117,7 @@ public class Score extends Fragment {
         dataSet.setValueTextSize(15f);
         PieData pieData=new PieData(dataSet);
         pieChart.setData(pieData);
-        pieChart.setCenterText("Total Marks\n"+(totalquestion)*4);
+        pieChart.setCenterText("Total Marks\n"+(totalquestion)*eachcorrectmarks);
         pieChart.getDescription().setEnabled(false);
         pieChart.setCenterTextSize(16f);
         pieChart.animate();
@@ -117,20 +125,5 @@ public class Score extends Fragment {
 
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        scoreref.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                scoreModel=snapshot.getValue(ScoreModel.class);
 
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-    }
 }

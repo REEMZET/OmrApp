@@ -92,6 +92,8 @@ public class MainActivity extends AppCompatActivity {
                 navController.navigate(R.id.welCome);
             }
         });
+        AppUpdateChecker appUpdateChecker = new AppUpdateChecker(MainActivity.this);
+        appUpdateChecker.checkForUpdate(true);
 
 }
 
@@ -127,6 +129,9 @@ public class MainActivity extends AppCompatActivity {
                     toolbar.setVisibility(View.VISIBLE);
                     break;
                 case R.id.score:
+                    toolbar.setVisibility(View.VISIBLE);
+                    break;
+                case R.id.report:
                     toolbar.setVisibility(View.VISIBLE);
                     break;
                 default:toolbar.setVisibility(View.GONE);

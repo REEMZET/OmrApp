@@ -1,16 +1,16 @@
 package com.reemzet.omr.Models;
 
 public class RankModel {
-        String studentname,studentuid,studentimg,studentcity,totaltime;
+        String studentname,studentuid,studentimg,totaltime;
         int totalmarks;
     public RankModel() {
     }
 
-    public RankModel(String studentname, String studentuid, String studentimg, String studentcity, String totaltime, int totalmarks) {
+    public RankModel(String studentname, String studentuid, String studentimg,String totaltime, int totalmarks) {
         this.studentname = studentname;
         this.studentuid = studentuid;
         this.studentimg = studentimg;
-        this.studentcity = studentcity;
+
         this.totaltime = totaltime;
         this.totalmarks = totalmarks;
     }
@@ -37,14 +37,6 @@ public class RankModel {
 
     public void setStudentimg(String studentimg) {
         this.studentimg = studentimg;
-    }
-
-    public String getStudentcity() {
-        return studentcity;
-    }
-
-    public void setStudentcity(String studentcity) {
-        this.studentcity = studentcity;
     }
 
     public String getTotaltime() {

@@ -1,12 +1,12 @@
 package com.reemzet.omr.Models;
 
 public class StudentsModel {
-    String studenname, studentphone, studentcity, studentstates, studentemail,preparation,batch,studentuid,requestedbatch,imageurl;
+    String studenname, studentphone, studentcity, studentstates, studentemail,preparation,batch,studentuid,requestedbatch,imageurl,totaltest,totalmarksobtained,maximumtestmarks;
 
     public StudentsModel() {
     }
 
-    public StudentsModel(String studenname, String studentphone, String studentcity, String studentstates, String studentemail, String preparation, String batch, String studentuid, String requestedbatch, String imageurl) {
+    public StudentsModel(String studenname, String studentphone, String studentcity, String studentstates, String studentemail, String preparation, String batch, String studentuid, String requestedbatch, String imageurl, String totaltest, String totalmarksobtained, String maximumtestmarks) {
         this.studenname = studenname;
         this.studentphone = studentphone;
         this.studentcity = studentcity;
@@ -17,6 +17,9 @@ public class StudentsModel {
         this.studentuid = studentuid;
         this.requestedbatch = requestedbatch;
         this.imageurl = imageurl;
+        this.totaltest = totaltest;
+        this.totalmarksobtained = totalmarksobtained;
+        this.maximumtestmarks = maximumtestmarks;
     }
 
     public String getStudenname() {
@@ -97,5 +100,29 @@ public class StudentsModel {
 
     public void setImageurl(String imageurl) {
         this.imageurl = imageurl;
+    }
+
+    public String getTotaltest() {
+        return totaltest;
+    }
+
+    public void setTotaltest(String totaltest) {
+        this.totaltest = totaltest;
+    }
+
+    public String getTotalmarksobtained() {
+        return totalmarksobtained;
+    }
+
+    public void setTotalmarksobtained(String totalmarksobtained) {
+        this.totalmarksobtained = totalmarksobtained;
+    }
+
+    public String getMaximumtestmarks() {
+        return maximumtestmarks;
+    }
+
+    public void setMaximumtestmarks(String maximumtestmarks) {
+        this.maximumtestmarks = maximumtestmarks;
     }
 }

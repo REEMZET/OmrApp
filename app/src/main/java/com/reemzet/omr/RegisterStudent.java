@@ -237,7 +237,7 @@ Button studentregisterbtn;
                     navController.popBackStack();
                     navController.navigate(R.id.homeStudent);
                 } else {
-                    StudentsModel studentsModel=new StudentsModel(studentname,studentphone,selectedDistrict,selectedState,studentemail,preparation,"Nobatch",mAuth.getUid(),"NoRequestedBatch","Noimage");
+                    StudentsModel studentsModel=new StudentsModel(studentname,studentphone,selectedDistrict,selectedState,studentemail,preparation,"Nobatch",mAuth.getUid(),"NoRequestedBatch","Noimage","0","0","0");
                     studentref.child(mAuth.getUid()).setValue(studentsModel).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {

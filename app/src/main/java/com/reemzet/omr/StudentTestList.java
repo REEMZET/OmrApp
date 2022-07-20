@@ -29,6 +29,11 @@ import com.reemzet.omr.Models.ScoreModel;
 import com.reemzet.omr.Models.TestDetails;
 
 import java.io.BufferedInputStream;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 
 public class StudentTestList extends Fragment {
@@ -48,7 +53,10 @@ public class StudentTestList extends Fragment {
         // Inflate the layout for this fragment
         View view= inflater.inflate(R.layout.studenttestlist, container, false);
         studenttestlistrecycler=view.findViewById(R.id.studenttestlist);
-        studenttestlistrecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+        linearLayoutManager.setReverseLayout(true);
+        linearLayoutManager.setStackFromEnd(true);
+       studenttestlistrecycler.setLayoutManager(linearLayoutManager);
         mAuth=FirebaseAuth.getInstance();
 
         NavHostFragment navHostFragment =
@@ -118,7 +126,8 @@ public class StudentTestList extends Fragment {
                 holder.tvreport.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (model.getResultstatus().equals("notpub")){
+                        ;
+                        if ( checktestperoid(model.getStarttime(),Integer.parseInt(model.getTesttime()))|| model.getResultstatus().equals("pub")){
                             sendtoscoreview(model);
 
                         }else Toast.makeText(getActivity(), "Result not Published. Contact to teacher", Toast.LENGTH_SHORT).show();
@@ -136,17 +145,23 @@ public class StudentTestList extends Fragment {
         scoreref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                ScoreModel scoreModel=snapshot.getValue(ScoreModel.class);
+                if (snapshot.exists()){
+                    ScoreModel scoreModel=snapshot.getValue(ScoreModel.class);
+                    Bundle bundle=new Bundle();
+                    bundle.putString("orgcode",orgcode);
+                    bundle.putString("testid",model.getTestid());
+                    bundle.putString("teststarttime",model.getStarttime());
+                    bundle.putString("testduration",model.getTesttime());
+                    bundle.putString("totalmarks", scoreModel.getTotalmarks());
+                    bundle.putString("correctquestion", scoreModel.getCorrectquestion());
+                    bundle.putString("unattempedquestion", scoreModel.getUnattempedquestion());
+                    bundle.putString("totalquestion", scoreModel.getTotalquestion());
+                    bundle.putString("eachcorrectmarks",model.getCorrectmarks());
+                    navController.navigate(R.id.score,bundle);
+                }else {
+                    Toast.makeText(getActivity(), "you have not attempted this test", Toast.LENGTH_SHORT).show();
+                }
 
-                Bundle bundle=new Bundle();
-
-                bundle.putString("orgcode",orgcode);
-                bundle.putString("testid",model.getTestid());
-                bundle.putString("totalmarks", scoreModel.getTotalmarks());
-                bundle.putString("correctquestion", scoreModel.getCorrectquestion());
-                bundle.putString("unattempedquestion", scoreModel.getUnattempedquestion());
-                bundle.putString("totalquestion", scoreModel.getTotalquestion());
-                navController.navigate(R.id.score,bundle);
             }
 
             @Override
@@ -155,6 +170,42 @@ public class StudentTestList extends Fragment {
             }
         });
     }
+    public boolean checktestperoid(String testtime,int duration){
+        SimpleDateFormat df = new SimpleDateFormat("h:mm:ss a");
+        Date d = null;
+        try {
+            d = df.parse(testtime);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(d);
+        cal.add(Calendar.MINUTE, duration);
+        String newTime = df.format(cal.getTime());
+
+        String currentTime = new SimpleDateFormat("h:mm:ss a", Locale.getDefault()).format(new Date());
+        String pattern = "h:mm:ss a";
+        SimpleDateFormat sdf = new SimpleDateFormat(pattern);
+
+        try {
+            Date date1 = sdf.parse(newTime);
+            Date date2 = sdf.parse(currentTime);
+
+            if(date1.after(date2)) {
+
+                return false;
+
+            } else {
+
+                return true;
+
+            }
+        } catch (ParseException e){
+            e.printStackTrace();
+        }
+        return false;
+    }
+
 
 
 }

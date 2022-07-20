@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -84,10 +85,14 @@ public class LeaderBoard extends Fragment {
        public void onBindViewHolder(@NonNull RankHolder holder, int position) {
               RankModel rankModel=rankarralist.get(position);
                 holder.tvstudentname.setText(rankModel.getStudentname());
-                holder.tvstudentcity.setText(rankModel.getStudentcity());
+                holder.tvtime.setText(rankModel.getTotaltime());
                 holder.tvrank.setText(String.format("#%d",position+1));
                 holder.tvmarks.setText(String.valueOf(rankModel.getTotalmarks()+"\nmarks"));
-
+           Glide.with(getActivity())
+                   .load(rankModel.getStudentimg())
+                   .centerCrop()
+                   .placeholder(R.drawable.student)
+                   .into(holder.studentimg);
        }
 
        @Override
@@ -96,15 +101,15 @@ public class LeaderBoard extends Fragment {
        }
 
        public class RankHolder extends RecyclerView.ViewHolder {
-           public TextView tvstudentname,tvstudentcity,tvrank,tvmarks;
+           public TextView tvstudentname,tvrank,tvmarks,tvtime;
            public CircularImageView studentimg;
            public RankHolder(@NonNull View itemView) {
                super(itemView);
                tvstudentname=itemView.findViewById(R.id.tvstudentname);
-               tvstudentcity=itemView.findViewById(R.id.tvstudentcity);
                studentimg=itemView.findViewById(R.id.studentimg);
                tvrank=itemView.findViewById(R.id.tvrank);
                tvmarks=itemView.findViewById(R.id.tvtotalmarks);
+               tvtime=itemView.findViewById(R.id.tvtime);
 
 
            }

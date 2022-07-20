@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_margin="6dp"
+    app:cardElevation="5dp"
+    android:elevation="5dp"
+    app:cardCornerRadius="5dp"
+    android:layout_height="wrap_content">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="4dp">
+
+        <com.mikhaellopez.circularimageview.CircularImageView
+            android:id="@+id/joinedstudentimg"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_marginStart="8dp"
+            app:civ_border_color="#3f51b5"
+            app:civ_border_width="0.5dp"
+            app:civ_shadow="true"
+            app:civ_shadow_color="#757575"
+            app:civ_shadow_radius="1dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/student" />
+
+        <TextView
+            android:id="@+id/tvjoinedstudentname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="Raj kumar singh"
+            android:textColor="#E91E63"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/joinedstudentimg"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/joinedstudentimg"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <TextView
+            android:id="@+id/tvjoinedstudentcity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="City-Gaya"
+            android:textColor="#3E3E3E"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="@+id/tvjoinedstudentmob"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/tvjoinedstudentmob"
+            app:layout_constraintTop_toBottomOf="@+id/tvjoinedstudentmob" />
+
+        <TextView
+            android:id="@+id/tvjoinedstudentmob"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:fontFamily="sans-serif-black"
+            android:text="Mob-9199014568"
+            android:textColor="#009688"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/joinedstudentimg"
+            app:layout_constraintTop_toBottomOf="@+id/tvjoinedstudentname"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <TextView
+            android:id="@+id/tvjoinedstudentemail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:autoLink="email"
+            android:text="Email:-raju5426@gmail.com"
+            android:textColor="#0353D8"
+            android:textColorLink="#0153F1"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/tvjoinedstudentcity"
+            app:layout_constraintTop_toBottomOf="@+id/tvjoinedstudentcity" />
+
+        <ImageView
+            android:id="@+id/imgshowreport"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/analysis" />
+
+        <TextView
+            android:id="@+id/textView23"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Show Report"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/imgshowreport"
+            app:layout_constraintStart_toStartOf="@+id/imgshowreport"
+            app:layout_constraintTop_toBottomOf="@+id/imgshowreport" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>

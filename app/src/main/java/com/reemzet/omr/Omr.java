@@ -47,11 +47,13 @@ import com.nex3z.togglebuttongroup.button.CircularToggle;
 import com.reemzet.omr.Models.OmrModel;
 import com.reemzet.omr.Models.RankModel;
 import com.reemzet.omr.Models.ScoreModel;
+import com.reemzet.omr.Models.StudentsModel;
 import com.reemzet.omr.Models.TestDetails;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Timer;
 import java.util.concurrent.TimeUnit;
@@ -59,7 +61,7 @@ import java.util.concurrent.TimeUnit;
 
 public class Omr extends Fragment {
     RecyclerView omrrecycler;
-    DatabaseReference testanswer, testdetails;
+    DatabaseReference testanswer, testdetails,studentref;
     TextView omrsubmitbtn;
     TestDetails testDetails;
     ArrayList<OmrModel> list;
@@ -77,6 +79,7 @@ public class Omr extends Fragment {
     OmrAdapter.OmrViewholder vholder ;
     ProgressDialog progressDialog;
     Date starttime,endtime;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -100,12 +103,15 @@ public class Omr extends Fragment {
         omrrecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
         testanswer=database.getReference("institute").child(orgcode).child("TestList").child(testref).child("answerlist");
         testdetails=database.getReference("institute").child(orgcode).child("TestList").child(testref);
+        studentref=FirebaseDatabase.getInstance().getReference("institute").child(orgcode).child("StduentList").child(mAuth.getUid());
         NavHostFragment navHostFragment =
                 (NavHostFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
         assert navHostFragment != null;
         navController = navHostFragment.getNavController();
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-
+        
+        checkattemptest();
+        
         list = new ArrayList<>();
         answerlist = new ArrayList<>();
         selectedanswer = new ArrayList<>();
@@ -194,7 +200,7 @@ public class Omr extends Fragment {
 
         @Override
         public void onBindViewHolder(@NonNull OmrViewholder holder, int position) {
-            OmrModel omrModel = omrModelArrayList.get(position);
+         OmrModel   omrModel = omrModelArrayList.get(position);
             vholder=holder;
             holder.questionno.setText(omrModel.getQuestionno());
             switch (selectedanswer.get(holder.getAdapterPosition())){
@@ -371,7 +377,6 @@ public class Omr extends Fragment {
                     TimeUnit.MILLISECONDS.toMinutes(totalTime),
                     TimeUnit.MILLISECONDS.toSeconds(totalTime) -
                             TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(totalTime)));
-
         showloding();
             vholder.a.setEnabled(false);
             vholder.b.setEnabled(false);
@@ -387,7 +392,7 @@ public class Omr extends Fragment {
             //code for total makrs obtain
             for (int i = 1; i < correctanswerlist.size(); i++) {
                 totalmarksobtained = totalmarksobtained + Integer.parseInt(correctanswerlist.get(i));
-                if (correctanswerlist.get(i).equals("4")) {
+                if (correctanswerlist.get(i).equals(testDetails.getCorrectmarks())) {
                     totalcorrect = ++totalcorrect;
                 }
             }
@@ -408,10 +413,12 @@ public class Omr extends Fragment {
             testdetails.child("StudentResponse").child(mAuth.getUid()).child("Score").setValue(scoreModel).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
-                    RankModel rankModel=new RankModel(studentname,mAuth.getUid(),studentimg,studentcity,timestamp,totalmarksobtained);
+
+                    RankModel rankModel=new RankModel(studentname,mAuth.getUid(),studentimg,timestamp,totalmarksobtained);
                     db.collection("Score").document(orgcode).collection(testref).document(mAuth.getUid()).set(rankModel).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
+                            updatestudenttotalreport();
                             Bundle bundle=new Bundle();
                             bundle.putString("totalmarks",String.valueOf(totalmarksobtained));
                             bundle.putString("totalquestion",String.valueOf(answerlist.size()-1));
@@ -437,6 +444,47 @@ public class Omr extends Fragment {
         progressDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         progressDialog.setCanceledOnTouchOutside(false);
     }
+    public void updatestudenttotalreport(){
+        HashMap<String, Object> updatereport = new HashMap<>();
+        studentref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                StudentsModel updatemodel=snapshot.getValue(StudentsModel.class);
+                int totaltest=Integer.parseInt(updatemodel.getTotaltest());
+                int totalmarks=Integer.parseInt(updatemodel.getTotalmarksobtained());
+                int maximummarks=Integer.parseInt(updatemodel.getMaximumtestmarks());
+                updatereport.put("totaltest",String.valueOf(totaltest+1));
+                updatereport.put("totalmarksobtained",String.valueOf(totalmarks+totalmarksobtained));
+                updatereport.put("maximumtestmarks",String.valueOf(maximummarks+Integer.parseInt(testDetails.getQuestionno())*Integer.parseInt(testDetails.getCorrectmarks())));
+                studentref.updateChildren(updatereport);
+            }
 
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
 
+            }
+        });
+    }
+    public void checkattemptest(){
+        showloding();
+        testdetails.child("StudentResponse").orderByChild(mAuth.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()){
+                    progressDialog.dismiss();
+                    Toast.makeText(getActivity(), "you have already attempted", Toast.LENGTH_SHORT).show();
+                    navController.popBackStack();
+                    navController.navigate(R.id.homeStudent);
+
+                }else {
+                    progressDialog.dismiss();
+                }
+            }
+            
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
 }

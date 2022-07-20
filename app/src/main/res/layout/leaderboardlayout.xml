@@ -48,33 +48,19 @@
             app:layout_constraintVertical_bias="0.0" />
 
         <TextView
-            android:id="@+id/tvstudentcity"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="1dp"
-            android:text="City-Gaya"
-            android:textColor="#3E3E3E"
-            android:textSize="12sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/tvstudentname"
-            app:layout_constraintStart_toStartOf="@+id/tvstudentname"
-            app:layout_constraintTop_toBottomOf="@+id/tvstudentname"
-            app:layout_constraintVertical_bias="0.0" />
-
-        <TextView
             android:id="@+id/tvtotalmarks"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif"
             android:gravity="center"
-            android:text="20 \nmarks"
+            android:text="20 marks"
             android:textColor="#009688"
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.86"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintEnd_toEndOf="@+id/tvstudentname"
+            app:layout_constraintStart_toStartOf="@+id/tvstudentname"
+            app:layout_constraintTop_toBottomOf="@+id/tvstudentname"
+            app:layout_constraintVertical_bias="0.0" />
 
         <TextView
             android:id="@+id/tvrank"
@@ -86,20 +72,18 @@
             android:textColor="#042AFD"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toEndOf="@+id/tvtotalmarks"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/textView21"
+            android:id="@+id/tvtime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="02:00\nmins"
+            android:text="02:00 mins"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/tvtotalmarks"
-            app:layout_constraintHorizontal_bias="0.76"
-            app:layout_constraintStart_toEndOf="@+id/tvstudentcity"
+            app:layout_constraintEnd_toStartOf="@+id/tvrank"
+            app:layout_constraintHorizontal_bias="0.89"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

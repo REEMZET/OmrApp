@@ -180,6 +180,9 @@ public class WelCome extends Fragment {
                 case R.id.score:
                     toolbar.setVisibility(View.VISIBLE);
                     break;
+                case R.id.report:
+                    toolbar.setVisibility(View.VISIBLE);
+                    break;
                 default:toolbar.setVisibility(View.GONE);
             }
         });
