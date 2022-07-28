@@ -2,8 +2,10 @@
 <resources>
     <array name="preloaded_fonts" translatable="false">
         <item>@font/adamina</item>
+        <item>@font/amita</item>
         <item>@font/dm_sans</item>
         <item>@font/dm_sans_bold</item>
         <item>@font/dm_sans_medium</item>
+        <item>@font/nunito_sans_italic</item>
     </array>
 </resources>

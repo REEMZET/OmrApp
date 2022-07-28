@@ -126,7 +126,6 @@ public class StudentTestList extends Fragment {
                 holder.tvreport.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        ;
                         if ( checktestperoid(model.getStarttime(),Integer.parseInt(model.getTesttime()))|| model.getResultstatus().equals("pub")){
                             sendtoscoreview(model);
 

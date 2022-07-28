@@ -39,34 +39,16 @@ public class WelCome extends Fragment {
     DatabaseReference teacherref,instituteref,studentref;
     ProgressDialog progressDialog;
     StudentsModel studentsModel;
-    NavigationView navigationView;
-    TextView loginusername,loginuserphonno;
-    LinearLayout chatnav,videonav,notesnav,homenav;
-    ImageView loginuserpic,logout;
-    DrawerLayout drawerLayout;
-    ActionBarDrawerToggle toggle;
-    Toolbar toolbar;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
        View view= inflater.inflate(R.layout.fragment_wel_come, container, false);
-        drawerLayout = getActivity().findViewById(R.id.drawer);
-        toolbar = getActivity().findViewById(R.id.toolbar);
-        navigationView = view.findViewById(R.id.nav_view);
         NavHostFragment navHostFragment =
                 (NavHostFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
         assert navHostFragment != null;
         navController = navHostFragment.getNavController();
-        navigationView = (NavigationView) getActivity().findViewById(R.id.nav_view);
-        View headerView = navigationView.getHeaderView(0);
-        loginusername=headerView.findViewById(R.id.loginusername);
-        loginuserphonno=headerView.findViewById(R.id.loginuserphone);
-        loginuserpic=headerView.findViewById(R.id.loginuserpic);
-        chatnav=headerView.findViewById(R.id.chatnav);
-        notesnav=headerView.findViewById(R.id.notesnav);
-        videonav=headerView.findViewById(R.id.videonav);
-        homenav=headerView.findViewById(R.id.homenav);
         btnstudent=view.findViewById(R.id.studentbtn);
         teacherbtn=view.findViewById(R.id.teacherbtn);
         mAuth = FirebaseAuth.getInstance();
@@ -106,11 +88,10 @@ public class WelCome extends Fragment {
                                 InstuteDetails instuteDetails = snapshot.getValue(InstuteDetails.class);
                                 Bundle bundle = new Bundle();
                                 bundle.putString("orgcode", instuteDetails.getOrgcode());
+                                bundle.putString("teachername",instuteDetails.getTeachername());
+                                bundle.putString("phone",instuteDetails.getTeacherphone());
                                 navController.popBackStack();
                                 navController.navigate(R.id.homeTeacher, bundle);
-                                loginusername.setText(instuteDetails.getTeachername());
-                                loginuserphonno.setText(instuteDetails.getTeacherphone());
-                                setupnavigation();
                                 progressDialog.dismiss();
                             }
                             @Override
@@ -134,13 +115,7 @@ public class WelCome extends Fragment {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.exists()){
                     studentsModel=snapshot.getValue(StudentsModel.class);
-                    loginusername.setText(studentsModel.getStudenname());
-                    loginuserphonno.setText(studentsModel.getStudentphone());
-                    setupnavigation();
                     navController.popBackStack();
-                    /*Bundle bundle=new Bundle();
-                    bundle.putString("city",studentsModel.getStudentcity());
-                    bundle.putString("batchcode", studentsModel.getBatch());*/
                     progressDialog.dismiss();
                     navController.navigate(R.id.homeStudent);
 
@@ -154,52 +129,14 @@ public class WelCome extends Fragment {
             }
         });
     }
-    public void hidenav(){
 
-        navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
-            int id=destination.getId();
-            switch (id){
-                case R.id.homeStudent:
-                    toolbar.setVisibility(View.VISIBLE);
-                    break;
-                case R.id.homeTeacher:
-                    toolbar.setVisibility(View.VISIBLE);
-                    break;
-                case R.id.t_testslist:
-                    toolbar.setVisibility(View.VISIBLE);
-                    break;
-                case R.id.studentList:
-                    toolbar.setVisibility(View.VISIBLE);
-                    break;
-                case R.id.setAnswer:
-                    toolbar.setVisibility(View.VISIBLE);
-                    break;
-                case R.id.testReport:
-                    toolbar.setVisibility(View.VISIBLE);
-                    break;
-                case R.id.score:
-                    toolbar.setVisibility(View.VISIBLE);
-                    break;
-                case R.id.report:
-                    toolbar.setVisibility(View.VISIBLE);
-                    break;
-                default:toolbar.setVisibility(View.GONE);
-            }
-        });
-    }
-    public void setupnavigation(){
-        NavigationUI.setupWithNavController(navigationView, navController);
-        toggle = new ActionBarDrawerToggle(getActivity(), drawerLayout, toolbar, R.string.open, R.string.close);
-        drawerLayout.addDrawerListener(toggle);
-        toggle.syncState();
-        navigationView.setItemIconTintList(null);
-    }
 
 
     @Override
     public void onStart() {
         super.onStart();
         checkloginuser();
-        hidenav();
+
     }
+
 }

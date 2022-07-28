@@ -7,6 +7,16 @@
     android:layout_height="match_parent"
     tools:context=".HomeStudent">
 
+    <ImageView
+        android:id="@+id/imageshare2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/bargraph"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <LinearLayout
         android:id="@+id/nobtchlayout"
         android:layout_width="0dp"
@@ -127,8 +137,8 @@
                 android:orientation="horizontal"
                 android:padding="4dp">
 
-                <ImageView
-                    android:id="@+id/imageView4"
+                <com.mikhaellopez.circularimageview.CircularImageView
+                    android:id="@+id/profileimg"
                     android:layout_width="70dp"
                     android:layout_height="60dp"
                     android:layout_gravity="center"
@@ -138,7 +148,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:id="@+id/textView10"
+                    android:id="@+id/tvprofile"
                     android:layout_width="wrap_content"
                     android:layout_height="0dp"
                     android:layout_weight="1"
@@ -147,9 +157,9 @@
                     android:text="Manage your profile Details"
                     android:textColor="#3F51B5"
                     android:textSize="16sp"
-                    app:layout_constraintBottom_toBottomOf="@+id/imageView4"
-                    app:layout_constraintStart_toEndOf="@+id/imageView4"
-                    app:layout_constraintTop_toTopOf="@+id/imageView4" />
+                    app:layout_constraintBottom_toBottomOf="@+id/profileimg"
+                    app:layout_constraintStart_toEndOf="@+id/profileimg"
+                    app:layout_constraintTop_toTopOf="@+id/profileimg" />
 
                 <ImageView
                     android:id="@+id/imageView5"
@@ -159,7 +169,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.02"
-                    app:layout_constraintStart_toEndOf="@+id/textView10"
+                    app:layout_constraintStart_toEndOf="@+id/tvprofile"
                     app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>

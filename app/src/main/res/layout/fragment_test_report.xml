@@ -45,7 +45,20 @@
                 <com.github.mikephil.charting.charts.PieChart
                     android:id="@+id/piechart"
                     android:layout_width="match_parent"
-                    android:layout_height="400dp" />
+                    android:layout_height="400dp">
+
+                </com.github.mikephil.charting.charts.PieChart>
+
+                <TextView
+                    android:id="@+id/tvtestresponse"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/alex_brush"
+                    android:gravity="center"
+                    android:text="Good"
+                    android:textColor="#E91E1E"
+                    android:textSize="48sp" />
+
             </LinearLayout>
 
         </androidx.cardview.widget.CardView>

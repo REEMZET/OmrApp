@@ -7,12 +7,166 @@
     android:layout_height="match_parent"
     tools:context=".LeaderBoard" >
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="0dp"
+        android:layout_height="250dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/animationView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#03A9F4"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:lottie_autoPlay="true"
+            app:lottie_fileName="celebration.json"
+            app:lottie_loop="true" />
+
+        <com.mikhaellopez.circularimageview.CircularImageView
+            android:id="@+id/top1"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            app:civ_border_color="#E91E63"
+            app:civ_border_width="0.5dp"
+            app:civ_shadow="true"
+            app:civ_shadow_color="#757575"
+            app:civ_shadow_radius="0.5dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.51"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.120000005"
+            app:srcCompat="@drawable/graduated" />
+
+        <ImageView
+            android:id="@+id/imageView12"
+            android:layout_width="33dp"
+            android:layout_height="20dp"
+            android:layout_marginBottom="-4dp"
+            android:src="@drawable/king"
+            app:layout_constraintBottom_toTopOf="@+id/top1"
+            app:layout_constraintEnd_toEndOf="@+id/top1"
+            app:layout_constraintStart_toStartOf="@+id/top1" />
+
+        <TextView
+            android:id="@+id/tvtop2name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/aclonica"
+            android:text="Name"
+            android:textColor="#FAF9F9"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="@+id/top2"
+            app:layout_constraintStart_toStartOf="@+id/top2"
+            app:layout_constraintTop_toBottomOf="@+id/top2" />
+
+        <com.mikhaellopez.circularimageview.CircularImageView
+            android:id="@+id/top2"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            app:civ_border_color="#E91E63"
+            app:civ_border_width="0.5dp"
+            app:civ_shadow="true"
+
+            app:civ_shadow_color="#757575"
+            app:civ_shadow_radius="1dp"
+            app:layout_constraintEnd_toStartOf="@+id/top1"
+            app:layout_constraintHorizontal_bias="0.35"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/top1"
+            app:srcCompat="@drawable/graduated">
+
+        </com.mikhaellopez.circularimageview.CircularImageView>
+
+        <TextView
+            android:id="@+id/tvtop1name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/aclonica"
+            android:text="Name"
+            android:textColor="#FAF9F9"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="@+id/top1"
+            app:layout_constraintStart_toStartOf="@+id/top1"
+            app:layout_constraintTop_toBottomOf="@+id/top1" />
+
+        <ImageView
+            android:id="@+id/imageView11"
+            android:layout_width="33dp"
+            android:layout_height="20dp"
+            android:layout_marginBottom="-4dp"
+            android:src="@drawable/king"
+            app:layout_constraintBottom_toTopOf="@+id/top2"
+            app:layout_constraintEnd_toEndOf="@+id/top2"
+            app:layout_constraintStart_toStartOf="@+id/top2" />
+
+        <com.mikhaellopez.circularimageview.CircularImageView
+            android:id="@+id/top3"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            app:civ_border_color="#E91E63"
+            app:civ_border_width="0.5dp"
+            app:civ_shadow="true"
+            app:civ_shadow_color="#757575"
+            app:civ_shadow_radius="1dp"
+            app:layout_constraintEnd_toEndOf="@+id/animationView"
+            app:layout_constraintHorizontal_bias="0.83"
+            app:layout_constraintStart_toEndOf="@+id/top1"
+            app:layout_constraintTop_toBottomOf="@+id/top1"
+            app:srcCompat="@drawable/graduated" />
+
+        <ImageView
+            android:id="@+id/imageView13"
+            android:layout_width="33dp"
+            android:layout_height="20dp"
+            android:layout_marginBottom="-4dp"
+            android:src="@drawable/king"
+            app:layout_constraintBottom_toTopOf="@+id/top3"
+            app:layout_constraintEnd_toEndOf="@+id/top3"
+            app:layout_constraintStart_toStartOf="@+id/top3" />
+
+        <TextView
+            android:id="@+id/tvtop3name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/aclonica"
+            android:text="Name"
+            android:textColor="#FAF9F9"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="@+id/top3"
+            app:layout_constraintStart_toStartOf="@+id/top3"
+            app:layout_constraintTop_toBottomOf="@+id/top3" />
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/imageView14"
+            android:layout_width="0dp"
+            android:layout_height="110dp"
+            app:layout_constraintEnd_toStartOf="@+id/top3"
+            app:layout_constraintHorizontal_bias="0.398"
+            app:layout_constraintStart_toEndOf="@+id/top2"
+            app:layout_constraintTop_toBottomOf="@+id/tvtop1name"
+            app:lottie_autoPlay="true"
+            app:lottie_fileName="prize.json"
+            app:lottie_loop="true" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rankrecycler"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="6dp"
+        android:layout_marginTop="-40dp"
+        android:layout_marginEnd="6dp"
+        android:background="@drawable/repobg"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
 </androidx.constraintlayout.widget.ConstraintLayout>

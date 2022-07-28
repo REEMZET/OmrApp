@@ -5,6 +5,7 @@ import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 
@@ -33,6 +34,7 @@ import android.widget.Toast;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -49,6 +51,7 @@ import com.reemzet.omr.Adapter.TodaystestlistViewHolder;
 import com.reemzet.omr.Models.OmrModel;
 import com.reemzet.omr.Models.TestDetails;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -63,7 +66,7 @@ public class T_testslist extends Fragment {
     RecyclerView testlistrecycler;
     NavController navController;
     FirebaseDatabase database;
-    DatabaseReference TestListref,scoreref;
+    DatabaseReference TestListref;
 
     TestDetails testDetails;
     DialogPlus dialog;
@@ -89,7 +92,10 @@ public class T_testslist extends Fragment {
         testlistrecycler=view.findViewById(R.id.testlistrecyclerview);
 
         testlistrecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
-
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+        linearLayoutManager.setReverseLayout(true);
+        linearLayoutManager.setStackFromEnd(true);
+        testlistrecycler.setLayoutManager(linearLayoutManager);
         NavHostFragment navHostFragment =
                 (NavHostFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
         assert navHostFragment != null;
@@ -238,7 +244,44 @@ public class T_testslist extends Fragment {
                             .setIcon(android.R.drawable.ic_dialog_alert)
                             .show();
                 });
+                holder.tvreport.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
 
+                        if ( checktestperoid(model.getStarttime(),Integer.parseInt(model.getTesttime()))|| model.getResultstatus().equals("pub")){
+                            Bundle bundle=new Bundle();
+                            bundle.putString("orgcode",orgcode);
+                            bundle.putString("testid",model.getTestid());
+                            navController.navigate(R.id.testReportForTeacher,bundle);
+                        }else {
+                            new AlertDialog.Builder(getActivity())
+                                    .setTitle("Alert!")
+                                    .setMessage("Are you Sure to publish result?")
+                                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            HashMap<String, Object> testdetails = new HashMap<>();
+                                            testdetails.put("resultstatus","pub");
+                                            testdetails.put("status","completed");
+                                            TestListref.child(getRef(holder.getAdapterPosition()).getKey()).updateChildren(testdetails).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void unused) {
+
+                                                }
+                                            });
+                                        }
+                                    })
+                                    .setNegativeButton(android.R.string.no, null)
+                                    .setIcon(android.R.drawable.ic_dialog_alert)
+                                    .show();
+                        }
+                    }
+                });
+                if ( checktestperoid(model.getStarttime(),Integer.parseInt(model.getTesttime()))|| model.getResultstatus().equals("pub")){
+                    holder.tvreport.setText("Report");
+                }else {
+                    holder.tvreport.setText("Publish result");
+                }
             }
         };
 
@@ -347,6 +390,42 @@ public class T_testslist extends Fragment {
         progressDialog.setContentView(R.layout.dialoprogress);
         progressDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         progressDialog.setCanceledOnTouchOutside(false);
+    }
+
+    public boolean checktestperoid(String testtime,int duration){
+        SimpleDateFormat df = new SimpleDateFormat("h:mm:ss a");
+        Date d = null;
+        try {
+            d = df.parse(testtime);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(d);
+        cal.add(Calendar.MINUTE, duration);
+        String newTime = df.format(cal.getTime());
+
+        String currentTime = new SimpleDateFormat("h:mm:ss a", Locale.getDefault()).format(new Date());
+        String pattern = "h:mm:ss a";
+        SimpleDateFormat sdf = new SimpleDateFormat(pattern);
+
+        try {
+            Date date1 = sdf.parse(newTime);
+            Date date2 = sdf.parse(currentTime);
+
+            if(date1.after(date2)) {
+
+                return false;
+
+            } else {
+
+                return true;
+
+            }
+        } catch (ParseException e){
+            e.printStackTrace();
+        }
+        return false;
     }
 
 

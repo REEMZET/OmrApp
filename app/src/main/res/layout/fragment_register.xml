@@ -120,7 +120,7 @@
                 android:paddingStart="29dp"
                 android:paddingTop="13dp"
                 android:paddingBottom="13dp"
-
+                android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
                 android:textColor="#050505"
                 android:textColorHint="#606060"
                 android:textSize="15dp" />

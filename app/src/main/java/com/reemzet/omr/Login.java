@@ -147,11 +147,13 @@ public class Login extends Fragment {
 
 
     public void showloding() {
-        progressDialog = new ProgressDialog(getActivity());
-        progressDialog.show();
-        progressDialog.setContentView(R.layout.dialoprogress);
-        progressDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-        progressDialog.setCanceledOnTouchOutside(false);
+        if(getActivity() != null) {
+            progressDialog = new ProgressDialog(getActivity());
+            progressDialog.show();
+            progressDialog.setContentView(R.layout.dialoprogress);
+            progressDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+            progressDialog.setCanceledOnTouchOutside(false);
+        }
     }
     public void checkuserexit(){
         instituteorgcoderef.orderByChild("teacherphone").startAt(phone).endAt(phone+ "\uf8ff").addListenerForSingleValueEvent(new ValueEventListener() {
@@ -181,6 +183,8 @@ public class Login extends Fragment {
                 navController.popBackStack();
                 Bundle bundle=new Bundle();
                 bundle.putString("orgcode",instuteDetails.getOrgcode());
+                bundle.putString("teachername",instuteDetails.getTeachername());
+                bundle.putString("phone",instuteDetails.getTeacherphone());
                 navController.navigate(R.id.homeTeacher,bundle);
                 Toast.makeText(getActivity(), "Login Successfully", Toast.LENGTH_SHORT).show();
             }

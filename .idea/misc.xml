@@ -13,6 +13,7 @@
         <entry key="..\:/Users/Ravi/AndroidStudioProjects/Omr/app/src/main/res/drawable/darkblue.xml" value="0.204" />
         <entry key="..\:/Users/Ravi/AndroidStudioProjects/Omr/app/src/main/res/drawable/editbg.xml" value="0.204" />
         <entry key="..\:/Users/Ravi/AndroidStudioProjects/Omr/app/src/main/res/drawable/editnowbg.xml" value="0.204" />
+        <entry key="..\:/Users/Ravi/AndroidStudioProjects/Omr/app/src/main/res/drawable/gradient.xml" value="0.204" />
         <entry key="..\:/Users/Ravi/AndroidStudioProjects/Omr/app/src/main/res/drawable/headergrad.xml" value="0.204" />
         <entry key="..\:/Users/Ravi/AndroidStudioProjects/Omr/app/src/main/res/drawable/ic_baseline_home_24.xml" value="0.204" />
         <entry key="..\:/Users/Ravi/AndroidStudioProjects/Omr/app/src/main/res/drawable/ic_baseline_share_24.xml" value="0.204" />
@@ -26,43 +27,51 @@
         <entry key="..\:/Users/Ravi/AndroidStudioProjects/Omr/app/src/main/res/drawable/tvbtn.xml" value="0.204" />
         <entry key="..\:/Users/Ravi/AndroidStudioProjects/Omr/app/src/main/res/drawable/upperborder.xml" value="0.204" />
         <entry key="..\:/Users/Ravi/AndroidStudioProjects/Omr/app/src/main/res/layout-v26/image_slider_layout_item.xml" value="0.19635416666666666" />
-        <entry key="..\:/Users/Ravi/AndroidStudioProjects/Omr/app/src/main/res/layout/activity_main.xml" value="0.22" />
+        <entry key="..\:/Users/Ravi/AndroidStudioProjects/Omr/app/src/main/res/layout/activity_main.xml" value="0.1802030456852792" />
         <entry key="..\:/Users/Ravi/AndroidStudioProjects/Omr/app/src/main/res/layout/answerlayout.xml" value="0.19635416666666666" />
+        <entry key="..\:/Users/Ravi/AndroidStudioProjects/Omr/app/src/main/res/layout/answerpreviewlayout.xml" value="0.5" />
         <entry key="..\:/Users/Ravi/AndroidStudioProjects/Omr/app/src/main/res/layout/batchlistlayout.xml" value="0.33" />
         <entry key="..\:/Users/Ravi/AndroidStudioProjects/Omr/app/src/main/res/layout/createtestlayout.xml" value="0.19635416666666666" />
         <entry key="..\:/Users/Ravi/AndroidStudioProjects/Omr/app/src/main/res/layout/dialoprogress.xml" value="0.19635416666666666" />
+        <entry key="..\:/Users/Ravi/AndroidStudioProjects/Omr/app/src/main/res/layout/editprofile.xml" value="0.18802083333333333" />
+        <entry key="..\:/Users/Ravi/AndroidStudioProjects/Omr/app/src/main/res/layout/fragment_about_dev.xml" value="0.14623739332816135" />
         <entry key="..\:/Users/Ravi/AndroidStudioProjects/Omr/app/src/main/res/layout/fragment_create_test.xml" value="0.19635416666666666" />
+        <entry key="..\:/Users/Ravi/AndroidStudioProjects/Omr/app/src/main/res/layout/fragment_edit_institute_details.xml" value="0.25" />
         <entry key="..\:/Users/Ravi/AndroidStudioProjects/Omr/app/src/main/res/layout/fragment_home_student.xml" value="0.25" />
-        <entry key="..\:/Users/Ravi/AndroidStudioProjects/Omr/app/src/main/res/layout/fragment_home_teacher.xml" value="0.25" />
-        <entry key="..\:/Users/Ravi/AndroidStudioProjects/Omr/app/src/main/res/layout/fragment_joined_student.xml" value="0.19635416666666666" />
+        <entry key="..\:/Users/Ravi/AndroidStudioProjects/Omr/app/src/main/res/layout/fragment_home_teacher.xml" value="0.5" />
+        <entry key="..\:/Users/Ravi/AndroidStudioProjects/Omr/app/src/main/res/layout/fragment_joined_student.xml" value="0.25" />
         <entry key="..\:/Users/Ravi/AndroidStudioProjects/Omr/app/src/main/res/layout/fragment_leader_board.xml" value="0.19635416666666666" />
         <entry key="..\:/Users/Ravi/AndroidStudioProjects/Omr/app/src/main/res/layout/fragment_login.xml" value="0.22" />
         <entry key="..\:/Users/Ravi/AndroidStudioProjects/Omr/app/src/main/res/layout/fragment_omr.xml" value="0.25" />
+        <entry key="..\:/Users/Ravi/AndroidStudioProjects/Omr/app/src/main/res/layout/fragment_preview_answer.xml" value="0.19635416666666666" />
+        <entry key="..\:/Users/Ravi/AndroidStudioProjects/Omr/app/src/main/res/layout/fragment_profile_edit.xml" value="0.2" />
         <entry key="..\:/Users/Ravi/AndroidStudioProjects/Omr/app/src/main/res/layout/fragment_register.xml" value="0.22" />
         <entry key="..\:/Users/Ravi/AndroidStudioProjects/Omr/app/src/main/res/layout/fragment_register_student.xml" value="0.22" />
-        <entry key="..\:/Users/Ravi/AndroidStudioProjects/Omr/app/src/main/res/layout/fragment_report.xml" value="0.22" />
+        <entry key="..\:/Users/Ravi/AndroidStudioProjects/Omr/app/src/main/res/layout/fragment_report.xml" value="0.19635416666666666" />
         <entry key="..\:/Users/Ravi/AndroidStudioProjects/Omr/app/src/main/res/layout/fragment_request_batch.xml" value="0.25" />
         <entry key="..\:/Users/Ravi/AndroidStudioProjects/Omr/app/src/main/res/layout/fragment_request_list.xml" value="0.19635416666666666" />
         <entry key="..\:/Users/Ravi/AndroidStudioProjects/Omr/app/src/main/res/layout/fragment_score.xml" value="0.19635416666666666" />
         <entry key="..\:/Users/Ravi/AndroidStudioProjects/Omr/app/src/main/res/layout/fragment_set_answer.xml" value="0.19635416666666666" />
         <entry key="..\:/Users/Ravi/AndroidStudioProjects/Omr/app/src/main/res/layout/fragment_signin_student.xml" value="0.19635416666666666" />
-        <entry key="..\:/Users/Ravi/AndroidStudioProjects/Omr/app/src/main/res/layout/fragment_splash_screen.xml" value="0.19635416666666666" />
+        <entry key="..\:/Users/Ravi/AndroidStudioProjects/Omr/app/src/main/res/layout/fragment_splash_screen.xml" value="0.15" />
         <entry key="..\:/Users/Ravi/AndroidStudioProjects/Omr/app/src/main/res/layout/fragment_student_list.xml" value="0.19635416666666666" />
         <entry key="..\:/Users/Ravi/AndroidStudioProjects/Omr/app/src/main/res/layout/fragment_student_test_list.xml" value="0.19635416666666666" />
         <entry key="..\:/Users/Ravi/AndroidStudioProjects/Omr/app/src/main/res/layout/fragment_t_testslist.xml" value="0.19635416666666666" />
         <entry key="..\:/Users/Ravi/AndroidStudioProjects/Omr/app/src/main/res/layout/fragment_test_report.xml" value="0.22" />
+        <entry key="..\:/Users/Ravi/AndroidStudioProjects/Omr/app/src/main/res/layout/fragment_test_report_for_teacher.xml" value="0.19635416666666666" />
         <entry key="..\:/Users/Ravi/AndroidStudioProjects/Omr/app/src/main/res/layout/fragment_tests.xml" value="0.19635416666666666" />
         <entry key="..\:/Users/Ravi/AndroidStudioProjects/Omr/app/src/main/res/layout/fragment_wel_come.xml" value="0.22" />
         <entry key="..\:/Users/Ravi/AndroidStudioProjects/Omr/app/src/main/res/layout/image_slider_layout_item.xml" value="0.22" />
         <entry key="..\:/Users/Ravi/AndroidStudioProjects/Omr/app/src/main/res/layout/joinedstudentlayout.xml" value="0.25" />
         <entry key="..\:/Users/Ravi/AndroidStudioProjects/Omr/app/src/main/res/layout/leaderboardlayout.xml" value="0.33" />
-        <entry key="..\:/Users/Ravi/AndroidStudioProjects/Omr/app/src/main/res/layout/nav_header_main.xml" value="0.19635416666666666" />
+        <entry key="..\:/Users/Ravi/AndroidStudioProjects/Omr/app/src/main/res/layout/nav_header_main.xml" value="0.33" />
+        <entry key="..\:/Users/Ravi/AndroidStudioProjects/Omr/app/src/main/res/layout/notificationview.xml" value="0.19635416666666666" />
         <entry key="..\:/Users/Ravi/AndroidStudioProjects/Omr/app/src/main/res/layout/omrlayout.xml" value="0.25" />
         <entry key="..\:/Users/Ravi/AndroidStudioProjects/Omr/app/src/main/res/layout/requestlistlayout.xml" value="0.33" />
         <entry key="..\:/Users/Ravi/AndroidStudioProjects/Omr/app/src/main/res/layout/spinner_layout.xml" value="0.19635416666666666" />
         <entry key="..\:/Users/Ravi/AndroidStudioProjects/Omr/app/src/main/res/layout/studenttestlist.xml" value="0.19635416666666666" />
         <entry key="..\:/Users/Ravi/AndroidStudioProjects/Omr/app/src/main/res/layout/studenttestlistlayout.xml" value="0.25" />
-        <entry key="..\:/Users/Ravi/AndroidStudioProjects/Omr/app/src/main/res/layout/teachertestlistlayout.xml" value="0.25" />
+        <entry key="..\:/Users/Ravi/AndroidStudioProjects/Omr/app/src/main/res/layout/teachertestlistlayout.xml" value="0.33" />
         <entry key="..\:/Users/Ravi/AndroidStudioProjects/Omr/app/src/main/res/layout/testcodelayout.xml" value="0.25" />
         <entry key="..\:/Users/Ravi/AndroidStudioProjects/Omr/app/src/main/res/layout/testeditlayout.xml" value="0.33" />
         <entry key="..\:/Users/Ravi/AndroidStudioProjects/Omr/app/src/main/res/layout/todaystudenttestlayout.xml" value="0.5" />

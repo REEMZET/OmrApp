@@ -27,7 +27,7 @@ import java.util.ArrayList;
 
 public class TestReport extends Fragment {
 
-   TextView tvtestname,correctans,incorrectans,unattempedans;
+   TextView tvtestresponse;
    String tmarks,testname,tquestion,unattempted;
     PieChart pieChart;
     ImageView btnhome;
@@ -40,9 +40,10 @@ public class TestReport extends Fragment {
         NavHostFragment navHostFragment = (NavHostFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
         assert navHostFragment != null;
         navController = navHostFragment.getNavController();
-
+        tvtestresponse=view.findViewById(R.id.tvtestresponse);
         tmarks=getArguments().getString("totalmarks");
         testname=getArguments().getString("testname");
+
 
         unattempted=getArguments().getString("unattempted");
         tquestion=getArguments().getString("totalquestion");
@@ -50,6 +51,7 @@ public class TestReport extends Fragment {
         btnhome=view.findViewById(R.id.homebtn);
         int attemped=Integer.parseInt(tquestion)-Integer.parseInt(unattempted);
         int totalquestion=Integer.parseInt(tquestion);
+        int halfquestion=totalquestion/2;
 
         ArrayList<PieEntry> records=new ArrayList<>();
         records.add(new PieEntry(attemped,"Attemped Questions"));
@@ -73,6 +75,9 @@ public class TestReport extends Fragment {
                 navController.navigate(R.id.homeStudent);
             }
         });
+        if (attemped<halfquestion){
+            tvtestresponse.setText("Average Attemped");
+        }else tvtestresponse.setText("Good Attemped");
         return view;
     }
 }

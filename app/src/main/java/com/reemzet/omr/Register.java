@@ -33,7 +33,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.reemzet.omr.Models.InstuteDetails;
+import com.reemzet.omr.Models.SliderMOdel;
 
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
@@ -49,7 +51,7 @@ public class Register extends Fragment {
         FirebaseAuth mAuth;
         NavController navController;
         FirebaseDatabase database;
-        DatabaseReference teacherref,instituteref,instituteorgcoderef,studentref;
+        DatabaseReference teacherref,instituteref,instituteorgcoderef,studentref,posterref;
         PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallbacks;
      private String selectedDistrict, selectedState;                 //vars to hold the values of selected State and District
     private TextView tvStateSpinner, tvDistrictSpinner;             //declaring TextView to show the errors
@@ -227,11 +229,13 @@ public class Register extends Fragment {
                 });
     }
     public void showloding() {
-        progressDialog = new ProgressDialog(getActivity());
-        progressDialog.show();
-        progressDialog.setContentView(R.layout.dialoprogress);
-        progressDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-        progressDialog.setCanceledOnTouchOutside(false);
+        if(getActivity() != null) {
+            progressDialog = new ProgressDialog(getActivity());
+            progressDialog.show();
+            progressDialog.setContentView(R.layout.dialoprogress);
+            progressDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+            progressDialog.setCanceledOnTouchOutside(false);
+        }
     }
     public void sentdatatodatabase(){
         InstuteDetails instuteDetails=new InstuteDetails(teachername,institutename,orgcode,selectedDistrict,selectedState,teacheremail,teacherphone,"TEACHER",mAuth.getUid(),"noimage");
@@ -241,11 +245,23 @@ public class Register extends Fragment {
                 instituteref.child(orgcode).child("InstituteDetails").setValue(instuteDetails).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
+                        posterref=database.getReference("institute").child(orgcode).child("slider");
+                        SliderMOdel slidermodel=new SliderMOdel();
+                        slidermodel.setTitle(institutename);
+                        slidermodel.setMessage("Thank You For Joining Our Class");
+                        slidermodel.setBgcard("#F9A02F");
+                        slidermodel.setTitlecolor("#FFFFFF");
+                        slidermodel.setMessagecolor("#000000");
+                        posterref.push().setValue(slidermodel);
                         instituteorgcoderef.push().setValue(instuteDetails);
                         progressDialog.dismiss();
                         navController.popBackStack();
                         Bundle bundle=new Bundle();
                         bundle.putString("orgcode",orgcode);
+                        FirebaseMessaging.getInstance().subscribeToTopic(orgcode);
+                        FirebaseMessaging.getInstance().subscribeToTopic("admin"+orgcode);
+                        FirebaseMessaging.getInstance().subscribeToTopic("institute");
+                        FirebaseMessaging.getInstance().subscribeToTopic("all");
                         navController.navigate(R.id.homeTeacher,bundle);
                     }
                 });

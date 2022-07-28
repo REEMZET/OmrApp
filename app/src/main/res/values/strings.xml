@@ -1,10 +1,10 @@
 <resources>
-    <string name="app_name">Omr</string>
+    <string name="app_name">Online Omr</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="open">open</string>
     <string name="close">close</string>
-    <string name="powered">Powered By <font color="#f7941e">NeonPlus</font></string>
+    <string name="powered">Powered By <font color="#f7941e">Reemzet</font></string>
     <string name="home">Home</string>
     <string name="terms_and_privacy"><![CDATA[Terms & conditions]]></string>
     <string name="profile">Profile</string>
@@ -15,8 +15,7 @@
     <string name="about_developer">About Developer</string>
     <string name="todaytest"><u>Tod</u>ay\'s Test</string>
     <string name="invite">इस ऐप में शामिल होने और एक साथ अध्ययन करने के लिए अपने दोस्तों को आमंत्रित करें</string>
-
-
+    <string name="serverkey">AAAAfsU2XI4:APA91bEIRm1pJQNCarSRdi4sT21BOYLf7ivYWmWHDRJRYoTvlUIq9KtiZwrNv_JB0nxdzgd_f5OjzuOHintYf4F5mgaErExJtlD_eXCn9Auz0M2POOCqf06_gisJsUSgs1varmSAkRbi</string>
     <string name="state">State*</string>
     <string name="district">District*</string>
     <string name="submit">Submit</string>
@@ -24,6 +23,7 @@
         <br /><br /> Using Names of Indian States in First Spinner.
         <br /> On selecting a State, Second Spinner is populated with the Names of Districts belonging to the selected State.
     </string>
+
 
     <string-array name="array_indian_states">
         <item>Select Your State</item>

@@ -1,7 +1,9 @@
 package com.reemzet.omr;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.res.AssetFileDescriptor;
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -22,6 +24,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -50,35 +53,39 @@ import com.reemzet.omr.Models.ScoreModel;
 import com.reemzet.omr.Models.StudentsModel;
 import com.reemzet.omr.Models.TestDetails;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Timer;
 import java.util.concurrent.TimeUnit;
 
 
 public class Omr extends Fragment {
     RecyclerView omrrecycler;
-    DatabaseReference testanswer, testdetails,studentref;
+    DatabaseReference testanswer, testdetails, studentref;
     TextView omrsubmitbtn;
     TestDetails testDetails;
     ArrayList<OmrModel> list;
     ArrayList<String> answerlist;
     ArrayList<String> selectedanswer;
     ArrayList<String> correctanswerlist;
-    int notattemped = 0, totalmarksobtained,totalcorrect,unattemped;
+    int notattemped = 0, totalmarksobtained, totalcorrect, unattemped;
     NavController navController;
     FirebaseAuth mAuth;
-    String orgcode,testref,studentname,studentimg,studentcity;
-    TextView tvtimer,tvunattempted;
+    String orgcode, testref, studentname, studentimg, studentcity;
+    TextView tvtimer, tvunattempted;
     CountDownTimer timer;
     String ticticktime;
     FirebaseFirestore db;
-    OmrAdapter.OmrViewholder vholder ;
+    OmrAdapter.OmrViewholder vholder;
     ProgressDialog progressDialog;
-    Date starttime,endtime;
+    Date starttime, endtime;
+    String teststarttime, testduration;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -87,31 +94,29 @@ public class Omr extends Fragment {
         View view = inflater.inflate(R.layout.fragment_omr, container, false);
         omrrecycler = view.findViewById(R.id.omrreycler);
         omrsubmitbtn = view.findViewById(R.id.omrsubmitbtn);
-        tvtimer=view.findViewById(R.id.tvtimer);
-        tvunattempted=view.findViewById(R.id.tvunattempted);
-         db= FirebaseFirestore.getInstance();
-        mAuth=FirebaseAuth.getInstance();
-        orgcode=getArguments().getString("orgcode");
-        testref=getArguments().getString("testref");
-        studentname=getArguments().getString("studentname");
-        studentimg=getArguments().getString("studentimg");
-        studentcity=getArguments().getString("studentcity");
-
+        tvtimer = view.findViewById(R.id.tvtimer);
+        tvunattempted = view.findViewById(R.id.tvunattempted);
+        db = FirebaseFirestore.getInstance();
+        mAuth = FirebaseAuth.getInstance();
+        orgcode = getArguments().getString("orgcode");
+        testref = getArguments().getString("testref");
+        studentname = getArguments().getString("studentname");
+        studentimg = getArguments().getString("studentimg");
+        studentcity = getArguments().getString("studentcity");
+        teststarttime = getArguments().getString("teststarttime");
+        testduration = getArguments().getString("testduration");
 
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         omrrecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
-        testanswer=database.getReference("institute").child(orgcode).child("TestList").child(testref).child("answerlist");
-        testdetails=database.getReference("institute").child(orgcode).child("TestList").child(testref);
-        studentref=FirebaseDatabase.getInstance().getReference("institute").child(orgcode).child("StduentList").child(mAuth.getUid());
+        testanswer = database.getReference("institute").child(orgcode).child("TestList").child(testref).child("answerlist");
+        testdetails = database.getReference("institute").child(orgcode).child("TestList").child(testref);
+        studentref = FirebaseDatabase.getInstance().getReference("institute").child(orgcode).child("StduentList").child(mAuth.getUid());
         NavHostFragment navHostFragment =
                 (NavHostFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
         assert navHostFragment != null;
         navController = navHostFragment.getNavController();
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-        
-        checkattemptest();
-        
         list = new ArrayList<>();
         answerlist = new ArrayList<>();
         selectedanswer = new ArrayList<>();
@@ -136,18 +141,17 @@ public class Omr extends Fragment {
                         for (i = 0; i <= questionno; i++) {
                             if (i != 0) {
                                 list.add(new OmrModel(String.valueOf(i), String.valueOf(answerlist.get(i))));
-
                             }
                             selectedanswer.add("x");
                             correctanswerlist.add("0");
                             OmrAdapter omrAdapter = new OmrAdapter(getContext(), list);
-                           omrrecycler.setAdapter(omrAdapter);
-                          omrrecycler.setLayoutManager(new GridLayoutManager(getContext(), 1));
+                            omrrecycler.setAdapter(omrAdapter);
+                            omrrecycler.setLayoutManager(new GridLayoutManager(getContext(), 1));
 
                         }
 
-                        tvunattempted.setText(testDetails.getQuestionno()+" Left");
-                        setTimer(60000*Integer.parseInt(testDetails.getTesttime()));
+                        tvunattempted.setText(testDetails.getQuestionno() + " Left");
+
                         starttime = Calendar.getInstance().getTime();
                     }
 
@@ -166,13 +170,14 @@ public class Omr extends Fragment {
             }
         });
 
+        setTimer();
         omrsubmitbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                showloding();
                 timer.cancel();
-                submitscoretofirebase( );
+                submitscoretofirebase();
 
-                //Toast.makeText(getContext(),String.valueOf(totalmarksobtained)+String.valueOf(totalcorrect),Toast.LENGTH_LONG).show();
             }
         });
         return view;
@@ -200,10 +205,10 @@ public class Omr extends Fragment {
 
         @Override
         public void onBindViewHolder(@NonNull OmrViewholder holder, int position) {
-         OmrModel   omrModel = omrModelArrayList.get(position);
-            vholder=holder;
+            OmrModel omrModel = omrModelArrayList.get(position);
+            vholder = holder;
             holder.questionno.setText(omrModel.getQuestionno());
-            switch (selectedanswer.get(holder.getAdapterPosition())){
+            switch (selectedanswer.get(holder.getAdapterPosition())) {
 
                 case "a":
                     holder.a.setChecked(true);
@@ -221,7 +226,7 @@ public class Omr extends Fragment {
             holder.a.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (holder.a.isChecked()){
+                    if (holder.a.isChecked()) {
                         selectedanswer.set(holder.getAdapterPosition(), "a");
                         if (omrModel.getAnswer().equals("a")) {
                             correctanswerlist.set(Integer.parseInt(omrModel.getQuestionno()), testDetails.getCorrectmarks());
@@ -231,7 +236,7 @@ public class Omr extends Fragment {
                         holder.b.setChecked(false);
                         holder.c.setChecked(false);
                         holder.d.setChecked(false);
-                    }else {
+                    } else {
                         selectedanswer.set(holder.getAdapterPosition(), "x");
                         correctanswerlist.set(Integer.parseInt(omrModel.getQuestionno()), "0");
                     }
@@ -241,7 +246,7 @@ public class Omr extends Fragment {
             holder.b.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (holder.b.isChecked()){
+                    if (holder.b.isChecked()) {
                         selectedanswer.set(holder.getAdapterPosition(), "b");
                         if (omrModel.getAnswer().equals("b")) {
                             correctanswerlist.set(Integer.parseInt(omrModel.getQuestionno()), testDetails.getCorrectmarks());
@@ -251,7 +256,7 @@ public class Omr extends Fragment {
                         holder.a.setChecked(false);
                         holder.c.setChecked(false);
                         holder.d.setChecked(false);
-                    }else {
+                    } else {
                         selectedanswer.set(holder.getAdapterPosition(), "x");
                         correctanswerlist.set(Integer.parseInt(omrModel.getQuestionno()), "0");
                     }
@@ -261,7 +266,7 @@ public class Omr extends Fragment {
             holder.c.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (holder.c.isChecked()){
+                    if (holder.c.isChecked()) {
                         selectedanswer.set(holder.getAdapterPosition(), "c");
                         if (omrModel.getAnswer().equals("c")) {
                             correctanswerlist.set(Integer.parseInt(omrModel.getQuestionno()), testDetails.getCorrectmarks());
@@ -271,7 +276,7 @@ public class Omr extends Fragment {
                         holder.a.setChecked(false);
                         holder.b.setChecked(false);
                         holder.d.setChecked(false);
-                    }else {
+                    } else {
                         selectedanswer.set(holder.getAdapterPosition(), "x");
                         correctanswerlist.set(Integer.parseInt(omrModel.getQuestionno()), "0");
                     }
@@ -281,7 +286,7 @@ public class Omr extends Fragment {
             holder.d.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (holder.d.isChecked()){
+                    if (holder.d.isChecked()) {
                         selectedanswer.set(holder.getAdapterPosition(), "d");
                         if (omrModel.getAnswer().equals("d")) {
                             correctanswerlist.set(Integer.parseInt(omrModel.getQuestionno()), testDetails.getCorrectmarks());
@@ -291,7 +296,7 @@ public class Omr extends Fragment {
                         holder.a.setChecked(false);
                         holder.b.setChecked(false);
                         holder.c.setChecked(false);
-                    }else {
+                    } else {
                         selectedanswer.set(holder.getAdapterPosition(), "x");
                         correctanswerlist.set(Integer.parseInt(omrModel.getQuestionno()), "0");
                     }
@@ -301,10 +306,7 @@ public class Omr extends Fragment {
             });
 
 
-
-
         }
-
 
 
         @Override
@@ -324,8 +326,7 @@ public class Omr extends Fragment {
 
         public class OmrViewholder extends RecyclerView.ViewHolder {
             TextView questionno;
-           public CheckBox a, b, c, d;
-
+            public CheckBox a, b, c, d;
 
 
             public OmrViewholder(@NonNull View itemView) {
@@ -340,151 +341,186 @@ public class Omr extends Fragment {
         }
     }
 
-    public void unattempedCount(){
+    public void unattempedCount() {
 
         for (int incr = 0; incr < selectedanswer.size(); incr++) {
             if (selectedanswer.get(incr).equals("x")) {
                 unattemped++;
             }
         }
-        tvunattempted.setText(String.valueOf(unattemped-1)+" Left");
-        unattemped=0;
+        tvunattempted.setText(String.valueOf(unattemped - 1) + " Left");
+        unattemped = 0;
     }
-    public void setTimer(int time) {
-        timer = new CountDownTimer(time, 1000) {
+
+    public void setTimer() {
+        String currentTime = new SimpleDateFormat("h:mm:ss a", Locale.getDefault()).format(new Date());
+
+        SimpleDateFormat df = new SimpleDateFormat("h:mm:ss a");
+        Date d = null;
+        try {
+            d = df.parse(teststarttime);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(d);
+        cal.add(Calendar.MINUTE, Integer.parseInt(testduration));
+        String newTime = df.format(cal.getTime());
+
+
+        Date date1 = null;
+        try {
+            date1 = df.parse(currentTime);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        Date date2 = null;
+        try {
+            date2 = df.parse(newTime);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        long diff = date2.getTime() - date1.getTime();
+
+
+        timer = new CountDownTimer(diff, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
                 long timeLeft = millisUntilFinished / 1000;
-                    ticticktime=String.format("%02d:%02d",
-                            TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished),
-                            TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) -
-                                    TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished)));
+                ticticktime = String.format("%02d:%02d",
+                        TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished),
+                        TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) -
+                                TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished)));
                 tvtimer.setText(ticticktime);
 
             }
 
             @Override
             public void onFinish() {
-
-                    submitscoretofirebase();
+                submitscoretofirebase();
             }
         }.start();
     }
-        public void submitscoretofirebase(){
-            endtime = Calendar.getInstance().getTime();
-            long totalTime = endtime.getTime() - starttime.getTime();
-            String timestamp=String.format("%02d:%02d",
-                    TimeUnit.MILLISECONDS.toMinutes(totalTime),
-                    TimeUnit.MILLISECONDS.toSeconds(totalTime) -
-                            TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(totalTime)));
-        showloding();
-            vholder.a.setEnabled(false);
-            vholder.b.setEnabled(false);
-            vholder.c.setEnabled(false);
-            vholder.d.setEnabled(false);
 
-            //code for notattemptedquestion
-            for (int incr = 0; incr < selectedanswer.size(); incr++) {
-                if (selectedanswer.get(incr).equals("x")) {
-                    notattemped++;
-                }
+    public void submitscoretofirebase() {
+        endtime = Calendar.getInstance().getTime();
+        long totalTime = endtime.getTime() - starttime.getTime();
+        String timestamp = String.format("%02d:%02d",
+                TimeUnit.MILLISECONDS.toMinutes(totalTime),
+                TimeUnit.MILLISECONDS.toSeconds(totalTime) -
+                        TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(totalTime)));
+
+        vholder.a.setEnabled(false);
+        vholder.b.setEnabled(false);
+        vholder.c.setEnabled(false);
+        vholder.d.setEnabled(false);
+
+        //code for notattemptedquestion
+        for (int incr = 0; incr < selectedanswer.size(); incr++) {
+            if (selectedanswer.get(incr).equals("x")) {
+                notattemped++;
             }
-            //code for total makrs obtain
-            for (int i = 1; i < correctanswerlist.size(); i++) {
-                totalmarksobtained = totalmarksobtained + Integer.parseInt(correctanswerlist.get(i));
-                if (correctanswerlist.get(i).equals(testDetails.getCorrectmarks())) {
-                    totalcorrect = ++totalcorrect;
-                }
+        }
+        //code for total makrs obtain
+        for (int i = 1; i < correctanswerlist.size(); i++) {
+            totalmarksobtained = totalmarksobtained + Integer.parseInt(correctanswerlist.get(i));
+            if (correctanswerlist.get(i).equals(testDetails.getCorrectmarks())) {
+                totalcorrect = ++totalcorrect;
             }
-            //uploadtofirebase
-            for (int i = 0; i < selectedanswer.size()-1; i++) {
-                int b = 1;
-                testdetails.child("StudentResponse").child(mAuth.getUid()).child("SelectedAnswer").child(String.valueOf(b + i)).setValue(selectedanswer.get(i)).addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-
-
-
-                    }
-                });
-            }
-
-            ScoreModel scoreModel=new ScoreModel(String.valueOf(totalmarksobtained),String.valueOf(totalcorrect),String.valueOf(notattemped-1),String.valueOf(answerlist.size()-1),timestamp);
-            testdetails.child("StudentResponse").child(mAuth.getUid()).child("Score").setValue(scoreModel).addOnCompleteListener(new OnCompleteListener<Void>() {
+        }
+        //uploadtofirebase
+        for (int i = 0; i < selectedanswer.size() - 1; i++) {
+            int b = 1;
+            testdetails.child("StudentResponse").child(mAuth.getUid()).child("SelectedAnswer").child(String.valueOf(b + i)).setValue(selectedanswer.get(i)).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
 
-                    RankModel rankModel=new RankModel(studentname,mAuth.getUid(),studentimg,timestamp,totalmarksobtained);
-                    db.collection("Score").document(orgcode).collection(testref).document(mAuth.getUid()).set(rankModel).addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            updatestudenttotalreport();
-                            Bundle bundle=new Bundle();
-                            bundle.putString("totalmarks",String.valueOf(totalmarksobtained));
-                            bundle.putString("totalquestion",String.valueOf(answerlist.size()-1));
-                            bundle.putString("unattempted",String.valueOf(notattemped-1));
-                            bundle.putString("testname",testDetails.getTestname());
-                            progressDialog.dismiss();
-                            navController.popBackStack();
-                            navController.navigate(R.id.testReport,bundle);
-                            list.clear();
-                            selectedanswer.clear();
-                            answerlist.clear();
-                            correctanswerlist.clear();
-                        }
-                    });
+
                 }
             });
-
         }
-    public void showloding() {
-        progressDialog = new ProgressDialog(getActivity());
-        progressDialog.show();
-        progressDialog.setContentView(R.layout.dialoprogress);
-        progressDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-        progressDialog.setCanceledOnTouchOutside(false);
+
+        ScoreModel scoreModel = new ScoreModel(String.valueOf(totalmarksobtained), String.valueOf(totalcorrect), String.valueOf(notattemped - 1), String.valueOf(answerlist.size() - 1), timestamp);
+        testdetails.child("StudentResponse").child(mAuth.getUid()).child("Score").setValue(scoreModel).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+
+                RankModel rankModel = new RankModel(studentname, mAuth.getUid(), studentimg, timestamp, totalmarksobtained);
+                db.collection("Score").document(orgcode).collection(testref).document(mAuth.getUid()).set(rankModel).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        updatestudenttotalreport();
+                        Bundle bundle = new Bundle();
+                        bundle.putString("totalmarks", String.valueOf(totalmarksobtained));
+                        bundle.putString("totalquestion", String.valueOf(answerlist.size() - 1));
+                        bundle.putString("unattempted", String.valueOf(notattemped - 1));
+                        bundle.putString("testname", testDetails.getTestname());
+                        progressDialog.dismiss();
+                        navController.popBackStack();
+                        navController.navigate(R.id.testReport, bundle);
+                        list.clear();
+                        selectedanswer.clear();
+                        answerlist.clear();
+                        correctanswerlist.clear();
+                    }
+                });
+            }
+        });
+
     }
-    public void updatestudenttotalreport(){
+
+    public void showloding() {
+        if (getActivity() != null) {
+            progressDialog = new ProgressDialog(getActivity());
+            progressDialog.show();
+            progressDialog.setContentView(R.layout.dialoprogress);
+            progressDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+            progressDialog.setCanceledOnTouchOutside(false);
+        }
+    }
+
+    public void updatestudenttotalreport() {
         HashMap<String, Object> updatereport = new HashMap<>();
         studentref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                StudentsModel updatemodel=snapshot.getValue(StudentsModel.class);
-                int totaltest=Integer.parseInt(updatemodel.getTotaltest());
-                int totalmarks=Integer.parseInt(updatemodel.getTotalmarksobtained());
-                int maximummarks=Integer.parseInt(updatemodel.getMaximumtestmarks());
-                updatereport.put("totaltest",String.valueOf(totaltest+1));
-                updatereport.put("totalmarksobtained",String.valueOf(totalmarks+totalmarksobtained));
-                updatereport.put("maximumtestmarks",String.valueOf(maximummarks+Integer.parseInt(testDetails.getQuestionno())*Integer.parseInt(testDetails.getCorrectmarks())));
-                studentref.updateChildren(updatereport);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-    }
-    public void checkattemptest(){
-        showloding();
-        testdetails.child("StudentResponse").orderByChild(mAuth.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()){
-                    progressDialog.dismiss();
-                    Toast.makeText(getActivity(), "you have already attempted", Toast.LENGTH_SHORT).show();
-                    navController.popBackStack();
-                    navController.navigate(R.id.homeStudent);
-
-                }else {
-                    progressDialog.dismiss();
+                if (snapshot.exists()) {
+                    StudentsModel updatemodel = snapshot.getValue(StudentsModel.class);
+                    int totaltest = Integer.parseInt(updatemodel.getTotaltest());
+                    int totalmarks = Integer.parseInt(updatemodel.getTotalmarksobtained());
+                    int maximummarks = Integer.parseInt(updatemodel.getMaximumtestmarks());
+                    updatereport.put("totaltest", String.valueOf(totaltest + 1));
+                    updatereport.put("totalmarksobtained", String.valueOf(totalmarks + totalmarksobtained));
+                    updatereport.put("maximumtestmarks", String.valueOf(maximummarks + Integer.parseInt(testDetails.getQuestionno()) * Integer.parseInt(testDetails.getCorrectmarks())));
+                    studentref.updateChildren(updatereport);
                 }
+
             }
-            
+
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
             }
         });
+
     }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+
+        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+
+                this.setEnabled(false);
+                timer.cancel();
+                requireActivity().onBackPressed();
+            }
+        };
+        requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
+    }
+
 }
+

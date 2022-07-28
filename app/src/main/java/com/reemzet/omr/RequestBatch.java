@@ -193,7 +193,8 @@ public class RequestBatch extends Fragment {
                                         studentref.child("requestedbatch").setValue(model.getOrgcode()).addOnCompleteListener(new OnCompleteListener<Void>() {
                                             @Override
                                             public void onComplete(@NonNull Task<Void> task) {
-
+                                                FcmNotificationsSender notificationsSender = new FcmNotificationsSender("/topics/admin"+model.getOrgcode(), "You have new request", studentsModel.getStudenname()+" wants to join your institute", getActivity(), getActivity());
+                                                notificationsSender.SendNotifications();
                                             }
                                         });
                                     }
@@ -208,7 +209,8 @@ public class RequestBatch extends Fragment {
                                                 studentref.child("requestedbatch").setValue(model.getOrgcode()).addOnCompleteListener(new OnCompleteListener<Void>() {
                                                     @Override
                                                     public void onComplete(@NonNull Task<Void> task) {
-
+                                                        FcmNotificationsSender notificationsSender = new FcmNotificationsSender("/topics/admin"+model.getOrgcode(), "You have new request", studentsModel.getStudenname()+" wants to join your institute", getContext(), getActivity());
+                                                        notificationsSender.SendNotifications();
                                                     }
                                                 });
                                             }

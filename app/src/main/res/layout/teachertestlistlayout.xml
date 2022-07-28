@@ -18,7 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:padding="10dp">
+        android:padding="6dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -126,8 +126,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="8dp"
-            android:background="@drawable/upperborder"
-            android:paddingTop="4dp">
+            android:background="@drawable/upperborder">
 
             <TextView
                 android:id="@+id/tvsetanswer"
@@ -135,15 +134,14 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:background="@drawable/tbuttonbg"
-                android:paddingStart="10dp"
+                android:paddingStart="8dp"
                 android:paddingTop="6dp"
-                android:paddingEnd="10dp"
+                android:paddingEnd="8dp"
                 android:paddingBottom="6dp"
                 android:text="Set Answer"
                 android:textColor="#FBFBFB"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/editnowbtn"
-                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -154,9 +152,9 @@
                 android:layout_marginTop="4dp"
                 android:background="@drawable/tbuttonbg"
                 android:gravity="center"
-                android:paddingStart="10dp"
+                android:paddingStart="8dp"
                 android:paddingTop="6dp"
-                android:paddingEnd="10dp"
+                android:paddingEnd="8dp"
                 android:paddingBottom="6dp"
                 android:text="Edit Now"
                 android:textColor="#FBFBFB"
@@ -172,9 +170,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:background="@drawable/tbuttonbg"
-                android:paddingStart="10dp"
+                android:paddingStart="8dp"
                 android:paddingTop="6dp"
-                android:paddingEnd="10dp"
+                android:paddingEnd="8dp"
                 android:paddingBottom="6dp"
                 android:text="Delete Test"
                 android:textColor="#FBFBFB"
@@ -189,9 +187,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:background="@drawable/tbuttonbg"
-                android:paddingStart="10dp"
+                android:paddingStart="8dp"
                 android:paddingTop="6dp"
-                android:paddingEnd="10dp"
+                android:paddingEnd="8dp"
                 android:paddingBottom="6dp"
                 android:text="Report"
                 android:textColor="#FBFBFB"

@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navgraph.xml"
-    app:startDestination="@id/welCome">
+    app:startDestination="@id/splashScreen">
 
     <fragment
         android:id="@+id/welCome"
@@ -57,6 +57,12 @@
         <action
             android:id="@+id/action_homeStudent_to_report"
             app:destination="@id/report" />
+        <action
+            android:id="@+id/action_homeStudent_to_profileEdit"
+            app:destination="@id/profileEdit" />
+        <action
+            android:id="@+id/action_homeStudent_to_aboutDev"
+            app:destination="@id/aboutDev" />
     </fragment>
     <fragment
         android:id="@+id/homeTeacher"
@@ -72,6 +78,12 @@
         <action
             android:id="@+id/action_homeTeacher_to_joinedStudent"
             app:destination="@id/joinedStudent" />
+        <action
+            android:id="@+id/action_homeTeacher_to_editInstituteDetails"
+            app:destination="@id/editInstituteDetails" />
+        <action
+            android:id="@+id/action_homeTeacher_to_aboutDev"
+            app:destination="@id/aboutDev" />
     </fragment>
     <fragment
         android:id="@+id/requestBatch"
@@ -112,6 +124,9 @@
         android:label="fragment_t_testslist"
         tools:layout="@layout/fragment_t_testslist" >
         <action
+            android:id="@+id/action_t_testslist_to_testReportForTeacher"
+            app:destination="@id/testReportForTeacher" />
+        <action
             android:id="@+id/action_t_testslist_to_setAnswer"
             app:destination="@id/setAnswer" />
     </fragment>
@@ -151,6 +166,12 @@
         <action
             android:id="@+id/action_score_to_leaderBoard"
             app:destination="@id/leaderBoard" />
+        <action
+            android:id="@+id/action_score_to_previewAnswer"
+            app:destination="@id/previewAnswer" />
+        <action
+            android:id="@+id/action_score_to_previewAnswer2"
+            app:destination="@id/previewAnswer" />
     </fragment>
     <fragment
         android:id="@+id/leaderBoard"
@@ -162,4 +183,42 @@
         android:name="com.reemzet.omr.JoinedStudent"
         android:label="fragment_joined_student"
         tools:layout="@layout/fragment_joined_student" />
+    <fragment
+        android:id="@+id/previewAnswer"
+        android:name="com.reemzet.omr.PreviewAnswer"
+        android:label="fragment_preview_answer"
+        tools:layout="@layout/fragment_preview_answer" />
+    <fragment
+        android:id="@+id/testReportForTeacher"
+        android:name="com.reemzet.omr.TestReportForTeacher"
+        android:label="fragment_test_report_for_teacher"
+        tools:layout="@layout/fragment_test_report_for_teacher" >
+        <action
+            android:id="@+id/action_testReportForTeacher_to_leaderBoard"
+            app:destination="@id/leaderBoard" />
+    </fragment>
+    <fragment
+        android:id="@+id/profileEdit"
+        android:name="com.reemzet.omr.ProfileEdit"
+        android:label="fragment_profile_edit"
+        tools:layout="@layout/fragment_profile_edit" />
+    <fragment
+        android:id="@+id/editInstituteDetails"
+        android:name="com.reemzet.omr.EditInstituteDetails"
+        android:label="fragment_edit_institute_details"
+        tools:layout="@layout/fragment_edit_institute_details" />
+    <fragment
+        android:id="@+id/aboutDev"
+        android:name="com.reemzet.omr.AboutDev"
+        android:label="fragment_about_dev"
+        tools:layout="@layout/fragment_about_dev" />
+    <fragment
+        android:id="@+id/splashScreen"
+        android:name="com.reemzet.omr.SplashScreen"
+        android:label="fragment_splash_screen"
+        tools:layout="@layout/fragment_splash_screen" >
+        <action
+            android:id="@+id/action_splashScreen_to_welCome"
+            app:destination="@id/welCome" />
+    </fragment>
 </navigation>

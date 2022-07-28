@@ -229,7 +229,7 @@ Button studentregisterbtn;
     }
     public void sentdatatodatabase(){
 
-    studentref.orderByChild("studentuid").startAt(mAuth.getUid()).endAt(mAuth+"\uf8ff").addValueEventListener(new ValueEventListener() {
+    studentref.orderByChild("studentuid").startAt(mAuth.getUid()).endAt(mAuth.getUid()+"\uf8ff").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()){

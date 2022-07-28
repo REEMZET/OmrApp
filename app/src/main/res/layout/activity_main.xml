@@ -22,7 +22,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:title="OMR_Sheet"
+            app:title="@string/app_name"
             app:titleTextColor="#FCFCFD">
 
             <ImageView
@@ -31,7 +31,7 @@
                 android:layout_height="25dp"
                 android:layout_gravity="end"
                 android:layout_marginEnd="8dp"
-                android:src="@drawable/people"
+                android:src="@drawable/logout"
                 tools:layout_editor_absoluteX="133dp"
                 tools:layout_editor_absoluteY="5dp" />
         </androidx.appcompat.widget.Toolbar>
@@ -59,12 +59,15 @@
         android:layout_width="270dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:background="#F2FDFEFF"
+        android:background="#F2FFFFFF"
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/nav_header_main"
-        app:menu="@menu/navmenu"
         app:itemTextColor="#1B1A1A"
-         />
+
+        />
 
 
 </androidx.drawerlayout.widget.DrawerLayout>
+
+
+
