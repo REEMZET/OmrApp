@@ -10,6 +10,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.reemzet.omr.R;
 
 import org.json.JSONException;
@@ -25,20 +27,19 @@ public class FcmNotificationsSender  {
     String body;
     Context mContext;
     Activity mActivity;
-
+    String fcmServerKey;
 
     private RequestQueue requestQueue;
     private final String postUrl = "https://fcm.googleapis.com/fcm/send";
-    private final String fcmServerKey = "AAAAfsU2XI4:APA91bEIRm1pJQNCarSRdi4sT21BOYLf7ivYWmWHDRJRYoTvlUIq9KtiZwrNv_JB0nxdzgd_f5OjzuOHintYf4F5mgaErExJtlD_eXCn9Auz0M2POOCqf06_gisJsUSgs1varmSAkRbi";
 
-    public FcmNotificationsSender(String userFcmToken, String title, String body, Context mContext, Activity mActivity) {
+
+    public FcmNotificationsSender(String userFcmToken, String title, String body, Context mContext, Activity mActivity, String fcmServerKey) {
         this.userFcmToken = userFcmToken;
         this.title = title;
         this.body = body;
         this.mContext = mContext;
         this.mActivity = mActivity;
-
-
+        this.fcmServerKey = fcmServerKey;
     }
 
     public void SendNotifications() {

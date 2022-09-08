@@ -51,6 +51,7 @@ public class LeaderBoard extends Fragment {
         db=FirebaseFirestore.getInstance();
         rankcycler=view.findViewById(R.id.rankrecycler);
         mAuth=FirebaseAuth.getInstance();
+
         rankcycler.setLayoutManager(new LinearLayoutManager(getActivity()));
         ArrayList<RankModel> rankModelArrayList=new ArrayList<>();
         adapter=new LeaderboarAdapter(rankModelArrayList);
@@ -65,8 +66,8 @@ public class LeaderBoard extends Fragment {
                 .setPersistenceEnabled(true)
                 .setCacheSizeBytes(FirebaseFirestoreSettings.CACHE_SIZE_UNLIMITED)
                 .build();
-        db.setFirestoreSettings(settings);
 
+        db.setFirestoreSettings(settings);
 
         db.collection("Score").document(orgcode).collection(testkey).orderBy("totalmarks", Query.Direction.DESCENDING).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override

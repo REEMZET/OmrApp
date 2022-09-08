@@ -72,7 +72,7 @@ import java.util.Objects;
 
 
 public class HomeStudent extends Fragment {
-
+    public static Context context;
     FirebaseDatabase database;
     FirebaseAuth mAuth;
     DatabaseReference posterref, TestListref, studentref;
@@ -311,7 +311,8 @@ public class HomeStudent extends Fragment {
                     studentcity = studentsModel.getStudentcity();
                     posterref = database.getReference("institute").child(batch).child("slider");
                     TestListref = database.getReference("institute").child(batch).child("TestList");
-                    Glide.with(getActivity())
+                    context = getContext();
+                    Glide.with(context)
                             .load(studentsModel.getImageurl())
                             .centerCrop()
                             .placeholder(R.drawable.student)

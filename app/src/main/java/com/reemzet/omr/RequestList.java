@@ -76,7 +76,9 @@ public class RequestList extends Fragment  {
                studentsModel=snapshot.getValue(StudentsModel.class);
                     setData();
             }else {
-                Toast.makeText(getActivity(), "You have not any Request", Toast.LENGTH_SHORT).show();
+                if (getActivity()!=null){
+                    Toast.makeText(getContext(), "You have not any Request", Toast.LENGTH_SHORT).show();
+                }
             }
         }
 

@@ -252,7 +252,15 @@ public class Register extends Fragment {
                         slidermodel.setBgcard("#F9A02F");
                         slidermodel.setTitlecolor("#FFFFFF");
                         slidermodel.setMessagecolor("#000000");
+
+                        SliderMOdel slider2=new SliderMOdel();
+                       slider2.setTitle("Powered By Reemzet");
+                        slider2.setMessage("For Any Technical help please Contact us Mob:- 9525581574");
+                        slider2.setBgcard("#C104FD");
+                        slider2.setTitlecolor("#FFFFFF");
+                        slider2.setMessagecolor("#F9FD01");
                         posterref.push().setValue(slidermodel);
+                        posterref.push().setValue(slider2);
                         instituteorgcoderef.push().setValue(instuteDetails);
                         progressDialog.dismiss();
                         navController.popBackStack();

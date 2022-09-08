@@ -73,7 +73,7 @@ public class HomeTeacher extends Fragment {
     RecyclerView todaystestrecycler;
     NavController navController;
     FirebaseDatabase database;
-    DatabaseReference TestListref,requestlistref,joinedstudentlistref,instituteref;
+    DatabaseReference TestListref,requestlistref,joinedstudentlistref,instituteref,serverkeyref;
     TestDetails testDetails;
     TextView todaysdate,tvcreatetest,tvnoofrequest,tvnoofjoinedstudent;
     ConstraintLayout consttestlist,constraintupdate,constraintrequestlist,constraintjoinedstudent,constraintnotification;
@@ -90,7 +90,7 @@ public class HomeTeacher extends Fragment {
     Bitmap bitmap;
     LinearLayout invite;
     FirebaseRecyclerAdapter<TestDetails, TodaystestlistViewHolder> adapter;
-
+    String serverkey;
 
     NavigationView navigationView;
     TextView loginusername,loginuserphonno;
@@ -153,11 +153,13 @@ public class HomeTeacher extends Fragment {
         requestlistref=database.getReference("institute").child(orgcode).child("BatchrequestList");
         joinedstudentlistref = database.getReference("institute").child(orgcode).child("StduentList");
         instituteref=database.getReference("institute").child(orgcode).child("InstituteDetails");
+        serverkeyref=database.getReference("sahreimgurl");
         setdatetohome();
         getdatafromserver();
         setnoofrequestlist();
         setnoofjoinedstudent();
         loadshareimg();
+        loadserverkey();
         loginusername.setText(getArguments().getString("teachername"));
         loginuserphonno.setText("Mob +91 "+getArguments().getString("phone"));
         setupnavigation();
@@ -279,7 +281,7 @@ public class HomeTeacher extends Fragment {
                         notmsg.setError("Empty");
                     }
                     else {
-                        FcmNotificationsSender notificationsSender = new FcmNotificationsSender("/topics/"+orgcode, nottitle.getText().toString(), notmsg.getText().toString(), getContext(), getActivity());
+                        FcmNotificationsSender notificationsSender = new FcmNotificationsSender("/topics/"+orgcode, nottitle.getText().toString(), notmsg.getText().toString(), getContext(), getActivity(),serverkey);
                         notificationsSender.SendNotifications();
                         Toast.makeText(getActivity(), "Notification sent", Toast.LENGTH_SHORT).show();
                         dialog.dismiss();
@@ -370,6 +372,22 @@ public class HomeTeacher extends Fragment {
         return view;
 
     }
+    public void loadserverkey(){
+        serverkeyref.child("url").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()){
+                    serverkey=snapshot.getValue(String.class);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
     public void getdatafromserver(){
         TestListref.addValueEventListener(new ValueEventListener() {
             @Override

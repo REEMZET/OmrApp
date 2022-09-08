@@ -43,7 +43,7 @@ public class RequestBatch extends Fragment {
 
     NavController navController;
     FirebaseDatabase database;
-    DatabaseReference batchref,studentref,instituteref;
+    DatabaseReference batchref,studentref,instituteref,serverkeyref;
     RecyclerView recyclerView;
     EditText editText;
     String city;
@@ -53,6 +53,7 @@ public class RequestBatch extends Fragment {
     FirebaseRecyclerAdapter<InstuteDetails, BatchlistViewHolder> adapter;
     FirebaseAuth mAuth;
     StudentsModel studentsModel;
+    String serverkey;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -73,8 +74,9 @@ public class RequestBatch extends Fragment {
         batchref=database.getReference("Organisation");
         instituteref=database.getReference("institute");
         studentref=database.getReference().child("students").child(mAuth.getUid());
-
+        serverkeyref=database.getReference("sahreimgurl");
         getStudentData();
+        loadserverkey();
         editText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -193,7 +195,7 @@ public class RequestBatch extends Fragment {
                                         studentref.child("requestedbatch").setValue(model.getOrgcode()).addOnCompleteListener(new OnCompleteListener<Void>() {
                                             @Override
                                             public void onComplete(@NonNull Task<Void> task) {
-                                                FcmNotificationsSender notificationsSender = new FcmNotificationsSender("/topics/admin"+model.getOrgcode(), "You have new request", studentsModel.getStudenname()+" wants to join your institute", getActivity(), getActivity());
+                                                FcmNotificationsSender notificationsSender = new FcmNotificationsSender("/topics/admin"+model.getOrgcode(), "You have new request", studentsModel.getStudenname()+" wants to join your institute", getActivity(), getActivity(),serverkey);
                                                 notificationsSender.SendNotifications();
                                             }
                                         });
@@ -209,7 +211,7 @@ public class RequestBatch extends Fragment {
                                                 studentref.child("requestedbatch").setValue(model.getOrgcode()).addOnCompleteListener(new OnCompleteListener<Void>() {
                                                     @Override
                                                     public void onComplete(@NonNull Task<Void> task) {
-                                                        FcmNotificationsSender notificationsSender = new FcmNotificationsSender("/topics/admin"+model.getOrgcode(), "You have new request", studentsModel.getStudenname()+" wants to join your institute", getContext(), getActivity());
+                                                        FcmNotificationsSender notificationsSender = new FcmNotificationsSender("/topics/admin"+model.getOrgcode(), "You have new request", studentsModel.getStudenname()+" wants to join your institute", getContext(), getActivity(),serverkey);
                                                         notificationsSender.SendNotifications();
                                                     }
                                                 });
@@ -231,5 +233,20 @@ public class RequestBatch extends Fragment {
         };
         recyclerView.setAdapter(adapter);
         adapter.startListening();
+    }
+    public void loadserverkey(){
+        serverkeyref.child("url").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()){
+                    serverkey=snapshot.getValue(String.class);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 }

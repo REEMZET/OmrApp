@@ -140,7 +140,7 @@
                 android:fontFamily="@font/dm_sans"
                 android:hint="Enter Email Address"
                 android:inputType="none|textEmailSubject"
-                android:maxLength="25"
+                android:maxLength="40"
                 android:maxLines="1"
                 android:minHeight="48dp"
                 android:paddingStart="29dp"
