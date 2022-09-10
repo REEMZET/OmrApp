@@ -1,6 +1,7 @@
 package com.reemzet.omr;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -35,11 +36,13 @@ import com.mikhaellopez.circularimageview.CircularImageView;
 import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.ViewHolder;
 import com.reemzet.omr.Models.StudentsModel;
+import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
 
 
 public class ProfileEdit extends Fragment {
+    public static Context context;
         EditText etname,etmob,etemail,etbatch,etprepare,etstate,etcity;
         EditText edtname,edtemail,edtprepare,edtstate,edtcity;
         ImageView btncamera;
@@ -72,7 +75,7 @@ public class ProfileEdit extends Fragment {
             profileimage=view.findViewById(R.id.profileimage);
             tvedit=view.findViewById(R.id.tvedit);
             orgcode=getArguments().getString("orgcode");
-
+            context = getActivity().getApplicationContext();
             database=FirebaseDatabase.getInstance();
             mAuth=FirebaseAuth.getInstance();
              storage = FirebaseStorage.getInstance();
@@ -118,10 +121,11 @@ public class ProfileEdit extends Fragment {
                     edtcity.setText(studentsModel.getStudentcity());
                     edtprepare.setText(studentsModel.getPreparation());
                     if (getActivity()!=null){
-                        Glide.with(getActivity())
+
+                        Picasso.get()
                                 .load(studentsModel.getImageurl())
-                                .centerCrop()
                                 .placeholder(R.drawable.student)
+                                .error(R.drawable.student)
                                 .into(cprofileimage);
                     }
 
@@ -242,6 +246,7 @@ public class ProfileEdit extends Fragment {
         profiledetails.put("studenname",editedname);
         profiledetails.put("studentcity",editedcity);
         profiledetails.put("studentstates",editedstate);
+        profiledetails.put("studentemail",editedemail);
         studentref.updateChildren(profiledetails);
         studentprofileref.updateChildren(profiledetails).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
@@ -262,10 +267,11 @@ public class ProfileEdit extends Fragment {
             etcity.setText(studentsModel.getStudentcity());
             etprepare.setText(studentsModel.getPreparation());
             etbatch.setText(studentsModel.getBatch());
-            Glide.with(getActivity())
+
+        Picasso.get()
                 .load(studentsModel.getImageurl())
-                .centerCrop()
                 .placeholder(R.drawable.student)
+                .error(R.drawable.student)
                 .into(profileimage);
 
     }

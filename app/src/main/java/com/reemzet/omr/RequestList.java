@@ -30,6 +30,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.reemzet.omr.Adapter.RequestListViewHolder;
 
 import com.reemzet.omr.Models.StudentsModel;
+import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
 
@@ -100,10 +101,11 @@ public class RequestList extends Fragment  {
                     holder.tvstudentname.setText(model.getStudenname());
                     holder.tvstudentcity.setText("City-"+model.getStudentcity());
                     holder.tvstudentmobile.setText("Mob-"+model.getStudentphone());
-                Glide.with(getActivity())
+
+                Picasso.get()
                         .load(model.getImageurl())
-                        .centerCrop()
                         .placeholder(R.drawable.student)
+                        .error(R.drawable.student)
                         .into(holder.studentimg);
 
             holder.tvreject.setOnClickListener(v -> {

@@ -58,6 +58,7 @@ import com.reemzet.omr.Adapter.TodaystestlistViewHolder;
 import com.reemzet.omr.Models.SliderMOdel;
 import com.reemzet.omr.Models.StudentsModel;
 import com.reemzet.omr.Models.TestDetails;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -175,7 +176,7 @@ public class HomeStudent extends Fragment {
         viewPager2 = view.findViewById(R.id.viewpager2);
         todaysdate = view.findViewById(R.id.todaydate);
         tvprofile = view.findViewById(R.id.tvprofile);
-        circularImageView = view.findViewById(R.id.profileimage);
+        circularImageView = view.findViewById(R.id.profileimg);
         database = FirebaseDatabase.getInstance();
         mAuth = FirebaseAuth.getInstance();
         studentref = database.getReference("students");
@@ -221,6 +222,7 @@ public class HomeStudent extends Fragment {
             public void onClick(View v) {
                 Bundle bundle = new Bundle();
                 bundle.putString("orgcode", batch);
+                bundle.putString("uid",mAuth.getUid());
                 navController.navigate(R.id.report, bundle);
             }
         });
@@ -312,11 +314,17 @@ public class HomeStudent extends Fragment {
                     posterref = database.getReference("institute").child(batch).child("slider");
                     TestListref = database.getReference("institute").child(batch).child("TestList");
                     context = getContext();
-                    Glide.with(context)
+                    Picasso.get()
                             .load(studentsModel.getImageurl())
-                            .centerCrop()
                             .placeholder(R.drawable.student)
+                            .error(R.drawable.student)
                             .into(loginuserpic);
+                    Picasso.get()
+                            .load(studentsModel.getImageurl())
+                            .placeholder(R.drawable.student)
+                            .error(R.drawable.student)
+                            .into(circularImageView);
+
                     setPoster();
                     getdatafromserver();
                     if (studentsModel.getBatch().equals("Nobatch")) {

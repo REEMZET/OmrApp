@@ -35,6 +35,7 @@ import com.reemzet.omr.Adapter.TodaystestlistViewHolder;
 import com.reemzet.omr.Models.InstuteDetails;
 import com.reemzet.omr.Models.StudentsModel;
 import com.reemzet.omr.Models.TestDetails;
+import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
 
@@ -178,10 +179,11 @@ public class RequestBatch extends Fragment {
                 holder.tvinstitutecity.setText("City:-"+model.getCity());
                 holder.tvinstitutestate.setText("State:-"+model.getState());
                 holder.tvinsitutename.setText(model.getInstitutename());
-                Glide.with(getActivity())
+
+                Picasso.get()
                         .load(model.getInstituteimage())
-                        .centerCrop()
                         .placeholder(R.drawable.university)
+                        .error(R.drawable.university)
                         .into(holder.instituteimage);
                 holder.tvsendrequest.setOnClickListener(new View.OnClickListener() {
 

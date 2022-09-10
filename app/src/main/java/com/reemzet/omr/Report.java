@@ -41,7 +41,7 @@ public class Report extends Fragment {
         ImageView bigimage,smallimage;
         FirebaseDatabase database;
         DatabaseReference studentref;
-        String orgcode;
+        String orgcode,checkusertype,uid;
         FirebaseAuth mAuth;
         StudentsModel studentsModel;
         TextView tvname,tvtotalmarks,tvfullmarks,tvnofotest,tvhighscorepercent;
@@ -55,6 +55,7 @@ public class Report extends Fragment {
             bigimage=view.findViewById(R.id.bigimage);
             smallimage=view.findViewById(R.id.smallimage);
             orgcode=getArguments().getString("orgcode");
+            uid=getArguments().getString("uid");
             tvname=view.findViewById(R.id.name);
             tvtotalmarks=view.findViewById(R.id.tvobtainmarks);
             tvfullmarks=view.findViewById(R.id.tvfullmakars);
@@ -63,7 +64,10 @@ public class Report extends Fragment {
             pr=view.findViewById(R.id.pr);
             mAuth=FirebaseAuth.getInstance();
             database=FirebaseDatabase.getInstance();
-            studentref=database.getReference("institute").child(orgcode).child("StduentList").child(mAuth.getUid());
+            studentref=database.getReference("institute").child(orgcode).child("StduentList").child(uid);
+
+
+
 
             showloding();
 

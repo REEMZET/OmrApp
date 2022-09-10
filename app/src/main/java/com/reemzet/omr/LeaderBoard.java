@@ -28,6 +28,7 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.mikhaellopez.circularimageview.CircularImageView;
 import com.reemzet.omr.Models.RankModel;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -106,30 +107,31 @@ public class LeaderBoard extends Fragment {
                 holder.tvtime.setText(rankModel.getTotaltime());
                 holder.tvrank.setText(String.format("#%d",position+1));
                 holder.tvmarks.setText(String.valueOf(rankModel.getTotalmarks()+"\nmarks"));
-           Glide.with(getActivity())
+           Picasso.get()
                    .load(rankModel.getStudentimg())
-                   .centerCrop()
                    .placeholder(R.drawable.student)
+                   .error(R.drawable.student)
                    .into(holder.studentimg);
         if(!rankarralist.isEmpty() && rankarralist.size()>=3){
             RankModel topper1=rankarralist.get(0);
             RankModel topper2=rankarralist.get(1);
             RankModel topper3=rankarralist.get(2);
-            Glide.with(getActivity())
+            Picasso.get()
                     .load(topper1.getStudentimg())
-                    .centerCrop()
                     .placeholder(R.drawable.student)
+                    .error(R.drawable.student)
                     .into(top1);
-            Glide.with(getActivity())
+            Picasso.get()
                     .load(topper2.getStudentimg())
-                    .centerCrop()
                     .placeholder(R.drawable.student)
+                    .error(R.drawable.student)
                     .into(top2);
-            Glide.with(getActivity())
+            Picasso.get()
                     .load(topper3.getStudentimg())
-                    .centerCrop()
                     .placeholder(R.drawable.student)
+                    .error(R.drawable.student)
                     .into(top3);
+
             tvtop1name.setText(topper1.getStudentname());
             tvtop2name.setText(topper2.getStudentname());
             tvtop3name.setText(topper3.getStudentname());
@@ -137,10 +139,10 @@ public class LeaderBoard extends Fragment {
 
         if (rankarralist.size()==1){
             RankModel topper1=rankarralist.get(0);
-            Glide.with(getActivity())
+            Picasso.get()
                     .load(topper1.getStudentimg())
-                    .centerCrop()
                     .placeholder(R.drawable.student)
+                    .error(R.drawable.student)
                     .into(top1);
             tvtop1name.setText(topper1.getStudentname());
         }

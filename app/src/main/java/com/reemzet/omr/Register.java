@@ -248,10 +248,10 @@ public class Register extends Fragment {
                         posterref=database.getReference("institute").child(orgcode).child("slider");
                         SliderMOdel slidermodel=new SliderMOdel();
                         slidermodel.setTitle(institutename);
-                        slidermodel.setMessage("Thank You For Joining Our Class");
-                        slidermodel.setBgcard("#F9A02F");
+                        slidermodel.setMessage("It was great to have you in my class.I loved all your contributions to our institute");
+                        slidermodel.setBgcard("#C70039");
                         slidermodel.setTitlecolor("#FFFFFF");
-                        slidermodel.setMessagecolor("#000000");
+                        slidermodel.setMessagecolor("#E3FD04");
 
                         SliderMOdel slider2=new SliderMOdel();
                        slider2.setTitle("Powered By Reemzet");

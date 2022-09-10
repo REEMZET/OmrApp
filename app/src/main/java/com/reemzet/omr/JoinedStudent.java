@@ -4,6 +4,8 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -40,6 +42,7 @@ public class JoinedStudent extends Fragment {
     String orgcode;
     EditText editText;
     Query query;
+    NavController navController;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -49,10 +52,15 @@ public class JoinedStudent extends Fragment {
         orgcode = getArguments().getString("orgcode");
         joinedstudentrecycler = view.findViewById(R.id.jionedstudentrecycler);
         editText=view.findViewById(R.id.etsearch);
+        NavHostFragment navHostFragment =
+                (NavHostFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+        assert navHostFragment != null;
+        navController = navHostFragment.getNavController();
         joinedstudentrecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
         database=FirebaseDatabase.getInstance();
         studentlistref = database.getReference("institute").child(orgcode).child("StduentList");
         getDatafromServer();
+
       editText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -126,7 +134,15 @@ public class JoinedStudent extends Fragment {
                         .centerCrop()
                         .placeholder(R.drawable.student)
                         .into(holder.joinedstudentimg);
-
+                holder.imgshowreport.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Bundle bundle = new Bundle();
+                        bundle.putString("orgcode", orgcode);
+                        bundle.putString("uid", model.getStudentuid());
+                        navController.navigate(R.id.report, bundle);
+                    }
+                });
             }
         };
         joinedstudentrecycler.setAdapter(adapter);

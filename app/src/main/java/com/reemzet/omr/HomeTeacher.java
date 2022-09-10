@@ -55,6 +55,7 @@ import com.orhanobut.dialogplus.ViewHolder;
 import com.reemzet.omr.Adapter.TodaystestlistViewHolder;
 import com.reemzet.omr.Models.InstuteDetails;
 import com.reemzet.omr.Models.TestDetails;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -297,15 +298,18 @@ public class HomeTeacher extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 InstuteDetails instuteDetails=snapshot.getValue(InstuteDetails.class);
-                Glide.with(getActivity())
+
+
+                Picasso.get()
                         .load(instuteDetails.getInstituteimage())
-                        .centerCrop()
-                        .placeholder(R.drawable.student)
+                        .placeholder(R.drawable.university)
+                        .error(R.drawable.university)
                         .into(circularImageView);
-                Glide.with(getActivity())
+
+                Picasso.get()
                         .load(instuteDetails.getInstituteimage())
-                        .centerCrop()
-                        .placeholder(R.drawable.student)
+                        .placeholder(R.drawable.university)
+                        .error(R.drawable.university)
                         .into(loginuserpic);
             }
 
